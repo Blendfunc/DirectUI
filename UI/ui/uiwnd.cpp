@@ -1,6 +1,6 @@
 #include "uiwnd.h"
 
-CDirectUIRect CDirectUIWnd::m_Rect;
+CDirectUIPositionManager* CDirectUIPositionManager::m_Manager = 0;
 
 LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -12,12 +12,16 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		PostQuitMessage(0);
 		break;
 	case WM_PAINT:
-		BeginPaint(hWnd, &ps);
-		HDC main = GetDC(hWnd);
-		BitBlt(main, 0, 0, 1024, 724, CDirectUIWnd::m_Rect.GetDirectUIRectDC(), 0, 0, SRCCOPY);
+		HDC dc0 = BeginPaint(hWnd, &ps);
+		//HDC main = GetDC(hWnd);
+		HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
+		int width = ps.rcPaint.right - ps.rcPaint.left;
+		int height = ps.rcPaint.bottom - ps.rcPaint.top;
+		BitBlt(dc0, ps.rcPaint.left, ps.rcPaint.top, width, height, dc, 0, 0, SRCCOPY);
 		EndPaint(hWnd, &ps);
-		ReleaseDC(hWnd, main);
+		//ReleaseDC(hWnd, main);
 		break;
+
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -28,9 +32,16 @@ CDirectUIWndClass* CDirectUIWndClass::m_Instance = 0;
 
 
 
-CDirectUIWnd::CDirectUIWnd(HINSTANCE hinstance)
+CDirectUIWnd::CDirectUIWnd(HINSTANCE hinstance, int width, int height)
 {
 	m_Hinstance = hinstance;
+	m_window_height = height;
+	m_window_width = width;
+
+	m_window_memory_dc = CreateCompatibleDC(NULL);
+	m_window_memory_dc_bitmap = CreateCompatibleBitmap(m_window_memory_dc, width, height);
+	InitUIMap(height, width);
+
 }
 
 CDirectUIWnd::~CDirectUIWnd()
@@ -44,7 +55,13 @@ HWND CDirectUIWnd::CreateDirectUIWnd(ATOM classAtom, LPCWSTR lpWindowName)
 	LPCWSTR lpcwstr = (LPCWSTR)classAtom;
 
 	GetClassInfo(m_Hinstance, lpcwstr, &wndClass);
-	m_HWND = CreateWindow(wndClass.lpszClassName, lpWindowName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 400, 300, NULL, NULL, m_Hinstance, NULL);
+	m_HWND = CreateWindow(wndClass.lpszClassName, lpWindowName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_window_width, m_window_height, NULL, NULL, m_Hinstance, NULL);
+	LONG style = ::GetWindowLongPtr(m_HWND, GWL_STYLE);
+	style = style &~WS_CAPTION &~WS_SYSMENU&~WS_SIZEBOX;
+	::SetWindowLongPtr(m_HWND, GWL_STYLE, style);
+
+	CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->RegisterDirectUIPositionManager(m_HWND, this);
+	CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetWindowMemoryDCMap(m_HWND, m_window_memory_dc);
 	return m_HWND;
 	
 }
@@ -53,12 +70,65 @@ void CDirectUIWnd::ShowDirectUIWnd()
 {
 	ShowWindow(m_HWND, SW_SHOW);
 	UpdateWindow(m_HWND);
-	HDC main = GetDC(m_HWND);
-	m_Rect.SetOwnerDC(main);
-	m_Rect.SetWidthHeight(724, 1024);
-	m_Rect.SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
-	m_Rect.UpdateDC(DUI_MOUSE_REMAINON);
-	ReleaseDC(m_HWND, main);
+	//HDC main = GetDC(m_HWND);
+	////m_Rect.SetOwnerDC(main);
+	//m_Rect.SetWidthHeight(39, 224);
+	//m_Rect.SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\bitmap_s.bmp");
+	//m_Rect.UpdateDC(DUI_MOUSE_REMAINON);
+	//ReleaseDC(m_HWND, main);
+}
+
+void CDirectUIWnd::AddDirectUIButton(CDirectUIButton * button, int x, int y)
+{
+	for (int i = x; i < x + button->GetDirectUIButtonRect()->GetWidth(); i++)
+	{
+		for (int j = y; j < y + button->GetDirectUIButtonRect()->GetHeight(); j++)
+		{
+			UpdateUIMap(i, j, button);
+		}
+	}
+	
+
+	button->SetXPosition(x);
+	button->SetYPosition(y);
+
+	CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
+	rect->UpdateDC(DUI_MOUSE_REMAINON);
+	UpdateMemoryDC(dynamic_cast<CDirectUIBase*>(button));
+}
+
+void CDirectUIWnd::UpdateMemoryDC(CDirectUIBase* base)
+{
+	if (base->GetClassNameType() == DIRECTUI_BUTTON)
+	{
+		CDirectUIButton* button = static_cast<CDirectUIButton*>(base);
+		const CDirectUIRect* rect = button->GetDirectUIButtonRect();
+		HDC button_dc = rect->GetDirectUIRectDC();
+		::BitBlt(m_window_memory_dc, button->GetXPosition(), button->GetYPosition(), rect->GetWidth(), rect->GetHeight(), button_dc, 0, 0, SRCCOPY);
+	}
+}
+
+std::map<int, std::map<int, CDirectUIBase*>>* CDirectUIWnd::GetWndUIMap()
+{
+	return nullptr;
+}
+
+void CDirectUIWnd::UpdateUIMap(int x, int y, CDirectUIBase * base)
+{
+	m_ui_map[x][y] = base;
+}
+
+void CDirectUIWnd::InitUIMap(int height, int width)
+{
+	for (int w = 0; w < width; w++)
+	{
+		std::map<int, CDirectUIBase*> map;
+		m_ui_map[w] = map;
+		for (int h = 0; h < height; h++)
+		{
+			(m_ui_map[w])[h] = 0;
+		}
+	}
 }
 
 CDirectUIWndClass * CDirectUIWndClass::GetCDirectUIWndClassInstance()
@@ -91,4 +161,40 @@ ATOM CDirectUIWndClass::RegisterDirectUIWndClass()
 		m_ClassVec.push_back(atom);
 	}
 	return atom;
+}
+
+
+CDirectUIPositionManager::CDirectUIPositionManager()
+{
+}
+
+CDirectUIPositionManager::~CDirectUIPositionManager()
+{
+}
+
+CDirectUIPositionManager * CDirectUIPositionManager::GetDirectUIPositionManagerInstance()
+{
+	if (!m_Manager)
+		m_Manager = new CDirectUIPositionManager;
+	return m_Manager;
+}
+
+void CDirectUIPositionManager::RegisterDirectUIPositionManager(HWND h, CDirectUIWnd* wnd)
+{
+	m_Data[h] = GetData(*wnd);
+}
+
+void CDirectUIPositionManager::SetWindowMemoryDCMap(HWND h, HDC dc)
+{
+	m_Window_MemoryDC[h] = dc;
+}
+
+HDC CDirectUIPositionManager::GetWindowMemoryDC(HWND h)
+{
+	return m_Window_MemoryDC[h];
+}
+
+window_ui_position CDirectUIPositionManager::GetData(CDirectUIWnd& wnd)
+{
+	return &wnd.m_ui_map;
 }

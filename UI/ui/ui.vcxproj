@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="uibutton.cpp" />
     <ClCompile Include="uirect.cpp" />
     <ClCompile Include="uiwnd.cpp" />
   </ItemGroup>
@@ -129,6 +130,7 @@
     <ClInclude Include="uibutton.h" />
     <ClInclude Include="uiposition.h" />
     <ClInclude Include="uirect.h" />
+    <ClInclude Include="uitype.h" />
     <ClInclude Include="uiwnd.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

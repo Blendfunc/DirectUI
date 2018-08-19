@@ -10,13 +10,20 @@ public:
 	CDirectUIRect();
 	~CDirectUIRect();
 public:
-	void SetOwnerDC(HDC dc);
+	//void SetCompatibleMainDC(HDC dc);
 	void SetWidthHeight(int height, int width);
 	void SetUIAttributeImg(DirectUIAttribute attribute, LPCTSTR filename);
 
+	int GetWidth() const;
+	int GetHeight() const;
+public:
 	void UpdateDC(DirectUIAttribute attribute);
+	void UpdateDC(LPCTSTR bitmap_name);
 
-	HDC GetDirectUIRectDC();
+	HDC GetDirectUIRectDC() const;
+
+	void SetUserData(void* data);
+	void* GetUserData();
 private:
 	HDC m_DC;
 	HBITMAP m_Bitmap;
@@ -28,4 +35,6 @@ private:
 
 	int m_Height;
 	int m_Width;
+
+	void* m_UserData;
 };

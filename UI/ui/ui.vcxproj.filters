@@ -24,6 +24,9 @@
     <ClCompile Include="uirect.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="uibutton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="uiwnd.h">
@@ -39,6 +42,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="uibutton.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="uitype.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
