@@ -14,8 +14,15 @@ public:
 	static CDirectUIPositionManager* GetDirectUIPositionManagerInstance();
 	void RegisterDirectUIPositionManager(HWND h, CDirectUIWnd* wnd);
 	void SetWindowMemoryDCMap(HWND h, HDC dc);
+	
 	HDC GetWindowMemoryDC(HWND h);
 	CDirectUIBase* GetPointUI(HWND h, int x, int y);
+	CDirectUIWnd* GetDirectUIWnd(HWND h);
+	
+	CDirectUIBase* GetCurrentUIBase();
+
+	void SetCurrentUIBase(CDirectUIBase* base);
+
 private:
 	window_ui_position GetData(CDirectUIWnd& wnd);
 
@@ -25,6 +32,11 @@ private:
 
 	std::map<HWND, HDC> m_Window_MemoryDC;
 
+	std::map<HWND, CDirectUIWnd*> m_Window_DirectUIWindow;
+
+	void SetWindowDirectUIWindow(HWND h, CDirectUIWnd* wnd);
+
+	CDirectUIBase* m_Current_UI;
 }; 
 
 

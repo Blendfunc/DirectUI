@@ -7,29 +7,34 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 
 	CDirectUIButton button;
 	CDirectUIRect * rect = (CDirectUIRect*)button.GetDirectUIButtonRect();
-	rect->SetWidthHeight(100, 200);
+	rect->SetWidthHeight(30, 50);
 	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button1;
 	CDirectUIRect * rect1 = (CDirectUIRect*)button1.GetDirectUIButtonRect();
-	rect1->SetWidthHeight(80, 80);
+	rect1->SetWidthHeight(30, 50);
 	rect1->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+	rect1->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button2;
 	CDirectUIRect * rect2 = (CDirectUIRect*)button2.GetDirectUIButtonRect();
-	rect2->SetWidthHeight(50, 30);
+	rect2->SetWidthHeight(30, 50);
 	rect2->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+	rect2->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+
 
 	CDirectUIButton button3;
 	CDirectUIRect * rect3 = (CDirectUIRect*)button3.GetDirectUIButtonRect();
-	rect3->SetWidthHeight(40, 32);
+	rect3->SetWidthHeight(30, 50);
 	rect3->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+	rect3->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 
-	CDirectUIWnd wnd(hInstance, 960, 453);
+	CDirectUIWnd wnd(hInstance, 500, 300);
 	wnd.AddDirectUIButton(&button, 0, 0);
-	wnd.AddDirectUIButton(&button1, 100, 200);
-	wnd.AddDirectUIButton(&button2, 190, 300);
-	wnd.AddDirectUIButton(&button3, 400, 400);
+	wnd.AddDirectUIButton(&button1, 50, 0);
+	wnd.AddDirectUIButton(&button2, 100, 0);
+	wnd.AddDirectUIButton(&button3, 150, 0);
 	wnd.CreateDirectUIWnd(atom);
 	wnd.ShowDirectUIWnd();
 

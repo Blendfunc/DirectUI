@@ -1,10 +1,11 @@
 #include "uiwnd.h"
-
+#include"Windowsx.h"
 CDirectUIPositionManager* CDirectUIPositionManager::m_Manager = 0;
 
 LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
+	RECT rect_validate;
 	//hWnd需要区分吗
 	switch (message)
 	{
@@ -12,19 +13,63 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		PostQuitMessage(0);
 		break;
 	case WM_PAINT:
+	{
 		HDC dc0 = BeginPaint(hWnd, &ps);
 		//HDC main = GetDC(hWnd);
 		HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
 		int width = ps.rcPaint.right - ps.rcPaint.left;
 		int height = ps.rcPaint.bottom - ps.rcPaint.top;
-		BitBlt(dc0, ps.rcPaint.left, ps.rcPaint.top, width, height, dc, 0, 0, SRCCOPY);
+		BitBlt(dc0, ps.rcPaint.left, ps.rcPaint.top, width, height, dc, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
 		EndPaint(hWnd, &ps);
 		//ReleaseDC(hWnd, main);
 		break;
+	}
+		
 	case WM_MOUSEMOVE:
+	{
+		int xPos = GET_X_LPARAM(lParam);
+		int yPos = GET_Y_LPARAM(lParam);
+		CDirectUIBase* base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetPointUI(hWnd, xPos, yPos);
+		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase();
+		if (base != current_base)
+		{
+			if (current_base)
+			{
+				if (current_base->GetClassNameType() == DIRECTUI_BUTTON)
+				{
+					CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
+					CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
+					rt->UpdateDC(DUI_MOUSE_REMAINON);
+					CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+					dwnd->UpdateMemoryDC(current_base);
+					rect_validate.left = bt->GetXPosition();
+					rect_validate.top = bt->GetYPosition();
+					rect_validate.right = rect_validate.left + rt->GetWidth();
+					rect_validate.bottom = rect_validate.top + rt->GetHeight();
+					::InvalidateRect(hWnd, &rect_validate, FALSE);
+					CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(0);
+				}
+			}
+			if (base && base->GetClassNameType() == DIRECTUI_BUTTON)
+			{
+				CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(base);
 
+				CDirectUIButton* button = static_cast<CDirectUIButton*>(base);
 
+				CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
+				rect->UpdateDC(DUI_MOUSE_MOVE);
+				CDirectUIWnd* duiwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+				duiwnd->UpdateMemoryDC(base);
+				//HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
+				rect_validate.left = button->GetXPosition();
+				rect_validate.top = button->GetYPosition();
+				rect_validate.right = rect_validate.left + rect->GetWidth();
+				rect_validate.bottom = rect_validate.top + rect->GetHeight();
+				::InvalidateRect(hWnd, &rect_validate, FALSE);
+			}
+		}
 		break;
+	}
 
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -173,6 +218,7 @@ ATOM CDirectUIWndClass::RegisterDirectUIWndClass()
 
 CDirectUIPositionManager::CDirectUIPositionManager()
 {
+	m_Current_UI = 0;
 }
 
 CDirectUIPositionManager::~CDirectUIPositionManager()
@@ -189,6 +235,7 @@ CDirectUIPositionManager * CDirectUIPositionManager::GetDirectUIPositionManagerI
 void CDirectUIPositionManager::RegisterDirectUIPositionManager(HWND h, CDirectUIWnd* wnd)
 {
 	m_Data[h] = GetData(*wnd);
+	SetWindowDirectUIWindow(h, wnd);
 }
 
 void CDirectUIPositionManager::SetWindowMemoryDCMap(HWND h, HDC dc)
@@ -201,7 +248,33 @@ HDC CDirectUIPositionManager::GetWindowMemoryDC(HWND h)
 	return m_Window_MemoryDC[h];
 }
 
+CDirectUIBase * CDirectUIPositionManager::GetPointUI(HWND h, int x, int y)
+{
+	return m_Data.at(h)->at(x).at(y);
+
+}
+
+CDirectUIWnd * CDirectUIPositionManager::GetDirectUIWnd(HWND h)
+{
+	return m_Window_DirectUIWindow.at(h);
+}
+
+CDirectUIBase * CDirectUIPositionManager::GetCurrentUIBase()
+{
+	return m_Current_UI;
+}
+
+void CDirectUIPositionManager::SetCurrentUIBase(CDirectUIBase * base)
+{
+	m_Current_UI = base;
+}
+
 window_ui_position CDirectUIPositionManager::GetData(CDirectUIWnd& wnd)
 {
 	return &wnd.m_ui_map;
+}
+
+void CDirectUIPositionManager::SetWindowDirectUIWindow(HWND h, CDirectUIWnd * wnd)
+{
+	m_Window_DirectUIWindow[h] = wnd;
 }
