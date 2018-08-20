@@ -120,6 +120,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="dc_control.hpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="uibutton.cpp" />
     <ClCompile Include="uirect.cpp" />

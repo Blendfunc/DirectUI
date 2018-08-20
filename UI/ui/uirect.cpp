@@ -1,9 +1,13 @@
 #include "uirect.h"
+#include <vector>
 
 CDirectUIRect::CDirectUIRect()
 {
 	m_DC = CreateCompatibleDC(NULL);
 	m_MemoryDC = CreateCompatibleDC(NULL);
+	CDCControl::GetDCControlInstance()->SwitchDCColorMode(CDCControl::color, m_DC, L"D:\\1.bmp");
+	CDCControl::GetDCControlInstance()->SwitchDCColorMode(CDCControl::color, m_MemoryDC, L"D:\\1.bmp");
+	SetStretchBltMode(m_DC, HALFTONE);
 	m_Height = 0;
 	m_Width = 0;
 	m_UserData = 0;
@@ -25,9 +29,10 @@ CDirectUIRect::~CDirectUIRect()
 void CDirectUIRect::SetWidthHeight(int height, int width)
 {
 	m_Bitmap = CreateCompatibleBitmap(m_DC, width, height);
-	SelectObject(m_DC, m_Bitmap);
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_DC, m_Bitmap);
 	m_Height = height;
 	m_Width = width;
+	DeleteObject(old_bitmap);
 }
 
 void CDirectUIRect::SetUIAttributeImg(DirectUIAttribute attribute, LPCTSTR filename)
@@ -49,7 +54,6 @@ int CDirectUIRect::GetHeight() const
 
 void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 {
-	
 	//HBITMAP bitmap = LoadBitmap(NULL, m_AttrMap.at(attribute).c_str());
 	HBITMAP bitmap = (HBITMAP)LoadImage(NULL, m_AttrMap.at(attribute).c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HBITMAP oldBitmap = (HBITMAP)SelectObject(m_MemoryDC, bitmap);
@@ -62,7 +66,7 @@ void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 	}
 	DeleteObject(oldBitmap);
 	StretchBlt(m_DC, 0, 0, m_Width, m_Height, m_MemoryDC, 0, 0, bitmapInfo.bmWidth, bitmapInfo.bmHeight, SRCCOPY);
-	
+	CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", m_DC);
 }
 
 void CDirectUIRect::UpdateDC(LPCTSTR bitmap_name)

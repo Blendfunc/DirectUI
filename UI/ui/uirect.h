@@ -1,7 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "uiattribute.h"
-
+#include "dc_control.hpp"
 #include <map>
 
 class CDirectUIRect

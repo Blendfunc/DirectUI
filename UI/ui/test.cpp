@@ -8,10 +8,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	CDirectUIButton button;
 	CDirectUIRect * rect = (CDirectUIRect*)button.GetDirectUIButtonRect();
 	rect->SetWidthHeight(100, 200);
-	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\bitmap_s.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 
-	CDirectUIWnd wnd(hInstance, 500, 300);
+	CDirectUIButton button1;
+	CDirectUIRect * rect1 = (CDirectUIRect*)button1.GetDirectUIButtonRect();
+	rect1->SetWidthHeight(80, 80);
+	rect1->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+
+	CDirectUIButton button2;
+	CDirectUIRect * rect2 = (CDirectUIRect*)button2.GetDirectUIButtonRect();
+	rect2->SetWidthHeight(50, 30);
+	rect2->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+
+	CDirectUIButton button3;
+	CDirectUIRect * rect3 = (CDirectUIRect*)button3.GetDirectUIButtonRect();
+	rect3->SetWidthHeight(40, 32);
+	rect3->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+
+	CDirectUIWnd wnd(hInstance, 960, 453);
 	wnd.AddDirectUIButton(&button, 0, 0);
+	wnd.AddDirectUIButton(&button1, 100, 200);
+	wnd.AddDirectUIButton(&button2, 190, 300);
+	wnd.AddDirectUIButton(&button3, 400, 400);
 	wnd.CreateDirectUIWnd(atom);
 	wnd.ShowDirectUIWnd();
 

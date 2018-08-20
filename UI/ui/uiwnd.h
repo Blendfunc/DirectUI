@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <vector>
 #include "uibutton.h"
+
 class CDirectUIWnd;
 typedef const std::map<int, std::map<int, CDirectUIBase*>>* window_ui_position;
 class CDirectUIPositionManager

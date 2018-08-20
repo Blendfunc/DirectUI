@@ -21,6 +21,10 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		EndPaint(hWnd, &ps);
 		//ReleaseDC(hWnd, main);
 		break;
+	case WM_MOUSEMOVE:
+
+
+		break;
 
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -39,7 +43,10 @@ CDirectUIWnd::CDirectUIWnd(HINSTANCE hinstance, int width, int height)
 	m_window_width = width;
 
 	m_window_memory_dc = CreateCompatibleDC(NULL);
+	CDCControl::GetDCControlInstance()->SwitchDCColorMode(CDCControl::color, m_window_memory_dc, L"D:\\1.bmp");
 	m_window_memory_dc_bitmap = CreateCompatibleBitmap(m_window_memory_dc, width, height);
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_window_memory_dc, m_window_memory_dc_bitmap);
+	DeleteObject(old_bitmap);
 	InitUIMap(height, width);
 
 }
