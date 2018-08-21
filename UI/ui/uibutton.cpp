@@ -5,6 +5,25 @@
 //	m_Rect.SetWidthHeight(height, width);
 //}
 
+CDirectUIButton::CDirectUIButton()
+{
+	m_callback = 0;
+}
+
+CDirectUIButton::~CDirectUIButton()
+{
+}
+
+IDirectUIButtonUICallBack * CDirectUIButton::GetEventCallBack()
+{
+	return m_callback;
+}
+
+void CDirectUIButton::SetEventCallBack(IDirectUIButtonUICallBack * callback)
+{
+	m_callback = callback;
+}
+
 void CDirectUIButton::SetClassNameType(DIRECTUITYPE type)
 {
 }

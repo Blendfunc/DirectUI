@@ -10,18 +10,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect->SetWidthHeight(30, 50);
 	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button1;
 	CDirectUIRect * rect1 = (CDirectUIRect*)button1.GetDirectUIButtonRect();
 	rect1->SetWidthHeight(30, 50);
 	rect1->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect1->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+	rect1->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+	rect1->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button2;
 	CDirectUIRect * rect2 = (CDirectUIRect*)button2.GetDirectUIButtonRect();
 	rect2->SetWidthHeight(30, 50);
 	rect2->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect2->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+	rect2->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+	rect2->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 
 	CDirectUIButton button3;
@@ -29,6 +35,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect3->SetWidthHeight(30, 50);
 	rect3->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect3->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 	CDirectUIWnd wnd(hInstance, 500, 300);
 	wnd.AddDirectUIButton(&button, 0, 0);
@@ -38,6 +46,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	wnd.CreateDirectUIWnd(atom);
 	wnd.ShowDirectUIWnd();
 
+	CDirectUIWnd wnd2(hInstance, 500, 500);
+	wnd2.AddDirectUIButton(&button, 0, 0);
+	wnd2.AddDirectUIButton(&button1, 50, 0);
+	wnd2.AddDirectUIButton(&button2, 100, 0);
+	wnd2.AddDirectUIButton(&button3, 150, 0);
+	wnd2.CreateDirectUIWnd(atom);
+	wnd2.ShowDirectUIWnd();
 
 	/*CDirectUIWnd wnd2(hInstance);
 	wnd2.AddDirectUIButton(&button, 0, 0);

@@ -66,7 +66,7 @@ void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 	}
 	DeleteObject(oldBitmap);
 	StretchBlt(m_DC, 0, 0, m_Width, m_Height, m_MemoryDC, 0, 0, bitmapInfo.bmWidth, bitmapInfo.bmHeight, SRCCOPY);
-	CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", m_DC);
+	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", m_DC);
 }
 
 void CDirectUIRect::UpdateDC(LPCTSTR bitmap_name)

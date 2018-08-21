@@ -30,7 +30,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 		int xPos = GET_X_LPARAM(lParam);
 		int yPos = GET_Y_LPARAM(lParam);
 		CDirectUIBase* base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetPointUI(hWnd, xPos, yPos);
-		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase();
+		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase(hWnd);
 		if (base != current_base)
 		{
 			if (current_base)
@@ -38,38 +38,124 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				if (current_base->GetClassNameType() == DIRECTUI_BUTTON)
 				{
 					CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
-					CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
-					rt->UpdateDC(DUI_MOUSE_REMAINON);
-					CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
-					dwnd->UpdateMemoryDC(current_base);
-					rect_validate.left = bt->GetXPosition();
-					rect_validate.top = bt->GetYPosition();
-					rect_validate.right = rect_validate.left + rt->GetWidth();
-					rect_validate.bottom = rect_validate.top + rt->GetHeight();
-					::InvalidateRect(hWnd, &rect_validate, FALSE);
-					CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(0);
+
+					RESULTCALLBACK result = DONOTHING;
+					if (bt->GetEventCallBack())
+						result = bt->GetEventCallBack()->OnMouseLeft();
+
+					if (result == DONOTPAINT)
+					{
+
+					}
+					else if (result == CONTINUE || result == DONOTHING)
+					{
+						CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
+						rt->UpdateDC(DUI_MOUSE_REMAINON);
+						CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+						dwnd->UpdateMemoryDC(current_base);
+						rect_validate.left = bt->GetXPosition();
+						rect_validate.top = bt->GetYPosition();
+						rect_validate.right = rect_validate.left + rt->GetWidth();
+						rect_validate.bottom = rect_validate.top + rt->GetHeight();
+						::InvalidateRect(hWnd, &rect_validate, FALSE);
+					}
+
+					CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(hWnd, 0);
 				}
 			}
 			if (base && base->GetClassNameType() == DIRECTUI_BUTTON)
 			{
-				CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(base);
+				CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->SetCurrentUIBase(hWnd, base);
 
 				CDirectUIButton* button = static_cast<CDirectUIButton*>(base);
 
-				CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
-				rect->UpdateDC(DUI_MOUSE_MOVE);
-				CDirectUIWnd* duiwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
-				duiwnd->UpdateMemoryDC(base);
-				//HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
-				rect_validate.left = button->GetXPosition();
-				rect_validate.top = button->GetYPosition();
-				rect_validate.right = rect_validate.left + rect->GetWidth();
-				rect_validate.bottom = rect_validate.top + rect->GetHeight();
+				RESULTCALLBACK result = DONOTHING;
+				if (button->GetEventCallBack())
+					result = button->GetEventCallBack()->OnMouseMoveStartIn();
+
+				if (result == DONOTPAINT)
+				{
+
+				}
+				else if(result == CONTINUE || result == DONOTHING)
+				{
+					CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
+					rect->UpdateDC(DUI_MOUSE_MOVE);
+					CDirectUIWnd* duiwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+					duiwnd->UpdateMemoryDC(base);
+					//HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
+					rect_validate.left = button->GetXPosition();
+					rect_validate.top = button->GetYPosition();
+					rect_validate.right = rect_validate.left + rect->GetWidth();
+					rect_validate.bottom = rect_validate.top + rect->GetHeight();
+					::InvalidateRect(hWnd, &rect_validate, FALSE);
+				}
+			}
+		}
+		break;
+	}
+
+	case WM_LBUTTONDOWN:
+	{
+		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase(hWnd);
+		if (current_base && current_base->GetClassNameType() == DIRECTUI_BUTTON)
+		{
+			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
+			RESULTCALLBACK result = DONOTHING;
+			if (bt->GetEventCallBack())
+				result = bt->GetEventCallBack()->OnLeftButtonClickDown();
+
+			if (result == DONOTPAINT)
+			{
+
+			}
+			else if (result == CONTINUE || result == DONOTHING)
+			{
+				CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
+				rt->UpdateDC(DUI_MOUSE_LEFT_CLICK_DOWN);
+				CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+				dwnd->UpdateMemoryDC(current_base);
+				rect_validate.left = bt->GetXPosition();
+				rect_validate.top = bt->GetYPosition();
+				rect_validate.right = rect_validate.left + rt->GetWidth();
+				rect_validate.bottom = rect_validate.top + rt->GetHeight();
 				::InvalidateRect(hWnd, &rect_validate, FALSE);
 			}
 		}
 		break;
 	}
+	case WM_LBUTTONUP:
+	{
+		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase(hWnd);
+		if (current_base && current_base->GetClassNameType() == DIRECTUI_BUTTON)
+		{
+			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
+			RESULTCALLBACK result = DONOTHING;
+			if (bt->GetEventCallBack())
+				result = bt->GetEventCallBack()->OnLeftButtonClickUp();
+
+			if (result == DONOTPAINT)
+			{
+
+			}
+			else if (result == CONTINUE || result == DONOTHING)
+			{
+				CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
+				rt->UpdateDC(DUI_MOUSE_LEFT_CLICK_UP);
+				CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+				dwnd->UpdateMemoryDC(current_base);
+				rect_validate.left = bt->GetXPosition();
+				rect_validate.top = bt->GetYPosition();
+				rect_validate.right = rect_validate.left + rt->GetWidth();
+				rect_validate.bottom = rect_validate.top + rt->GetHeight();
+				::InvalidateRect(hWnd, &rect_validate, FALSE);
+			}
+		}
+
+
+		break;
+	}
+	 
 
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
@@ -218,7 +304,7 @@ ATOM CDirectUIWndClass::RegisterDirectUIWndClass()
 
 CDirectUIPositionManager::CDirectUIPositionManager()
 {
-	m_Current_UI = 0;
+	/*m_Current_UI = 0;*/
 }
 
 CDirectUIPositionManager::~CDirectUIPositionManager()
@@ -259,14 +345,17 @@ CDirectUIWnd * CDirectUIPositionManager::GetDirectUIWnd(HWND h)
 	return m_Window_DirectUIWindow.at(h);
 }
 
-CDirectUIBase * CDirectUIPositionManager::GetCurrentUIBase()
+CDirectUIBase * CDirectUIPositionManager::GetCurrentUIBase(HWND h)
 {
-	return m_Current_UI;
+	if(m_Current_UI_Map.count(h))
+	return m_Current_UI_Map[h];
+	return 0;
+
 }
 
-void CDirectUIPositionManager::SetCurrentUIBase(CDirectUIBase * base)
+void CDirectUIPositionManager::SetCurrentUIBase(HWND h, CDirectUIBase * base)
 {
-	m_Current_UI = base;
+	m_Current_UI_Map[h] = base;
 }
 
 window_ui_position CDirectUIPositionManager::GetData(CDirectUIWnd& wnd)

@@ -11,6 +11,7 @@ enum RESULTCALLBACK
 
 class IDirectUIButtonUICallBack
 {
+public:
 	virtual RESULTCALLBACK OnLeftButtonClickDown() = 0 ;
 
 	virtual RESULTCALLBACK OnMouseMoveStartIn() = 0;
@@ -25,6 +26,8 @@ class IDirectUIButtonUICallBack
 class CDirectUIButton : public CDirectUIBase
 {
 public:
+	CDirectUIButton();
+	~CDirectUIButton();
 
 	//void SetPosition(int left, int up, int right, int down);
 
