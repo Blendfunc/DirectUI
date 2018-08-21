@@ -41,7 +41,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 					RESULTCALLBACK result = DONOTHING;
 					if (bt->GetEventCallBack())
-						result = bt->GetEventCallBack()->OnMouseLeft();
+						result = bt->GetEventCallBack()->OnMouseLeft(hWnd);
 
 					if (result == DONOTPAINT)
 					{
@@ -71,7 +71,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 				RESULTCALLBACK result = DONOTHING;
 				if (button->GetEventCallBack())
-					result = button->GetEventCallBack()->OnMouseMoveStartIn();
+					result = button->GetEventCallBack()->OnMouseMoveStartIn(hWnd);
 
 				if (result == DONOTPAINT)
 				{
@@ -103,7 +103,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
 			RESULTCALLBACK result = DONOTHING;
 			if (bt->GetEventCallBack())
-				result = bt->GetEventCallBack()->OnLeftButtonClickDown();
+				result = bt->GetEventCallBack()->OnLeftButtonClickDown(hWnd);
 
 			if (result == DONOTPAINT)
 			{
@@ -132,7 +132,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
 			RESULTCALLBACK result = DONOTHING;
 			if (bt->GetEventCallBack())
-				result = bt->GetEventCallBack()->OnLeftButtonClickUp();
+				result = bt->GetEventCallBack()->OnLeftButtonClickUp(hWnd);
 
 			if (result == DONOTPAINT)
 			{
@@ -178,6 +178,11 @@ CDirectUIWnd::CDirectUIWnd(HINSTANCE hinstance, int width, int height)
 	m_window_memory_dc_bitmap = CreateCompatibleBitmap(m_window_memory_dc, width, height);
 	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_window_memory_dc, m_window_memory_dc_bitmap);
 	DeleteObject(old_bitmap);
+
+	HBITMAP bitmap = (HBITMAP)LoadImage(NULL, L"D:\\Aurora.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HBITMAP oldBitmap = (HBITMAP)SelectObject(m_window_memory_dc, bitmap);
+	DeleteObject(oldBitmap);
+
 	InitUIMap(height, width);
 
 }

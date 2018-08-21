@@ -12,15 +12,15 @@ enum RESULTCALLBACK
 class IDirectUIButtonUICallBack
 {
 public:
-	virtual RESULTCALLBACK OnLeftButtonClickDown() = 0 ;
+	virtual RESULTCALLBACK OnLeftButtonClickDown(HWND h) = 0 ;
 
-	virtual RESULTCALLBACK OnMouseMoveStartIn() = 0;
+	virtual RESULTCALLBACK OnMouseMoveStartIn(HWND h) = 0;
 
-	virtual RESULTCALLBACK OnLeftButtonClickUp() = 0;
+	virtual RESULTCALLBACK OnLeftButtonClickUp(HWND h) = 0;
 
-	virtual RESULTCALLBACK OnMouseMoveIn() = 0;
+	virtual RESULTCALLBACK OnMouseMoveIn(HWND h) = 0;
 
-	virtual RESULTCALLBACK OnMouseLeft() = 0;
+	virtual RESULTCALLBACK OnMouseLeft(HWND h) = 0;
 };
 
 class CDirectUIButton : public CDirectUIBase

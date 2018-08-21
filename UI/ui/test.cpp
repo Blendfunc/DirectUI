@@ -1,11 +1,28 @@
 #include "uiwnd.h"
+
+
+class DIRECTUIBUTTONCALLBACK : public IDirectUIButtonUICallBack
+{
+public:
+	virtual RESULTCALLBACK OnLeftButtonClickDown(HWND h);
+
+	virtual RESULTCALLBACK OnMouseMoveStartIn(HWND h);
+
+	virtual RESULTCALLBACK OnLeftButtonClickUp(HWND h);
+
+	virtual RESULTCALLBACK OnMouseMoveIn(HWND h);
+
+	virtual RESULTCALLBACK OnMouseLeft(HWND h);
+};
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine, int iCmdShow)
 {
 	CDirectUIWndClass::GetCDirectUIWndClassInstance()->SetDirectUIWndAttribute(L"MyDirectUIWnd", hInstance);
 	ATOM atom = CDirectUIWndClass::GetCDirectUIWndClassInstance()->RegisterDirectUIWndClass();
-
+	DIRECTUIBUTTONCALLBACK cb, cb2, cb3, cb4;
 
 	CDirectUIButton button;
+	button.SetEventCallBack(&cb);
 	CDirectUIRect * rect = (CDirectUIRect*)button.GetDirectUIButtonRect();
 	rect->SetWidthHeight(30, 50);
 	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
@@ -14,6 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button1;
+	button1.SetEventCallBack(&cb);
 	CDirectUIRect * rect1 = (CDirectUIRect*)button1.GetDirectUIButtonRect();
 	rect1->SetWidthHeight(30, 50);
 	rect1->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
@@ -22,6 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect1->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
 	CDirectUIButton button2;
+	button2.SetEventCallBack(&cb);
 	CDirectUIRect * rect2 = (CDirectUIRect*)button2.GetDirectUIButtonRect();
 	rect2->SetWidthHeight(30, 50);
 	rect2->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
@@ -31,6 +50,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 
 
 	CDirectUIButton button3;
+	button3.SetEventCallBack(&cb);
 	CDirectUIRect * rect3 = (CDirectUIRect*)button3.GetDirectUIButtonRect();
 	rect3->SetWidthHeight(30, 50);
 	rect3->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
@@ -46,13 +66,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	wnd.CreateDirectUIWnd(atom);
 	wnd.ShowDirectUIWnd();
 
-	CDirectUIWnd wnd2(hInstance, 500, 500);
+	/*CDirectUIWnd wnd2(hInstance, 500, 500);
 	wnd2.AddDirectUIButton(&button, 0, 0);
 	wnd2.AddDirectUIButton(&button1, 50, 0);
 	wnd2.AddDirectUIButton(&button2, 100, 0);
 	wnd2.AddDirectUIButton(&button3, 150, 0);
 	wnd2.CreateDirectUIWnd(atom);
-	wnd2.ShowDirectUIWnd();
+	wnd2.ShowDirectUIWnd();*/
 
 	/*CDirectUIWnd wnd2(hInstance);
 	wnd2.AddDirectUIButton(&button, 0, 0);
@@ -280,3 +300,33 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 //	}
 //	return DefWindowProc(hwnd, message, wParam, lParam);
 //}
+
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickDown(HWND h)
+{
+	::OutputDebugString(L"鼠标左键按下\n");
+	return CONTINUE;
+}
+
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveStartIn(HWND h)
+{
+	::OutputDebugString(L"鼠标移入\n");
+	return CONTINUE;
+}
+
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickUp(HWND h)
+{
+	::OutputDebugString(L"鼠标左键抬起\n");
+	return CONTINUE;
+}
+
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveIn(HWND h)
+{
+	::OutputDebugString(L"鼠标正在移动\n");
+	return CONTINUE;
+}
+
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseLeft(HWND h)
+{
+	::OutputDebugString(L"鼠标离开\n");
+	return CONTINUE;
+}
