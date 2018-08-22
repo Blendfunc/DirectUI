@@ -8,19 +8,20 @@ enum RESULTCALLBACK
 	CONTINUE = 1  ,
 	DONOTPAINT = 2
 };
+class CDirectUIButton;
 
 class IDirectUIButtonUICallBack
 {
 public:
-	virtual RESULTCALLBACK OnLeftButtonClickDown(HWND h) = 0 ;
+	virtual RESULTCALLBACK OnLeftButtonClickDown(CDirectUIButton* button) = 0 ;
 
-	virtual RESULTCALLBACK OnMouseMoveStartIn(HWND h) = 0;
+	virtual RESULTCALLBACK OnMouseMoveStartIn(CDirectUIButton* button) = 0;
 
-	virtual RESULTCALLBACK OnLeftButtonClickUp(HWND h) = 0;
+	virtual RESULTCALLBACK OnLeftButtonClickUp(CDirectUIButton* button) = 0;
 
-	virtual RESULTCALLBACK OnMouseMoveIn(HWND h) = 0;
+	virtual RESULTCALLBACK OnMouseMoveIn(CDirectUIButton* buttonn) = 0;
 
-	virtual RESULTCALLBACK OnMouseLeft(HWND h) = 0;
+	virtual RESULTCALLBACK OnMouseLeft(CDirectUIButton* button) = 0;
 };
 
 class CDirectUIButton : public CDirectUIBase

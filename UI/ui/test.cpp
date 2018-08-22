@@ -4,15 +4,15 @@
 class DIRECTUIBUTTONCALLBACK : public IDirectUIButtonUICallBack
 {
 public:
-	virtual RESULTCALLBACK OnLeftButtonClickDown(HWND h);
+	virtual RESULTCALLBACK OnLeftButtonClickDown(CDirectUIButton* button);
 
-	virtual RESULTCALLBACK OnMouseMoveStartIn(HWND h);
+	virtual RESULTCALLBACK OnMouseMoveStartIn(CDirectUIButton* button);
 
-	virtual RESULTCALLBACK OnLeftButtonClickUp(HWND h);
+	virtual RESULTCALLBACK OnLeftButtonClickUp(CDirectUIButton* button);
 
-	virtual RESULTCALLBACK OnMouseMoveIn(HWND h);
+	virtual RESULTCALLBACK OnMouseMoveIn(CDirectUIButton* buttonn);
 
-	virtual RESULTCALLBACK OnMouseLeft(HWND h);
+	virtual RESULTCALLBACK OnMouseLeft(CDirectUIButton* button);
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine, int iCmdShow)
@@ -301,32 +301,52 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 //	return DefWindowProc(hwnd, message, wParam, lParam);
 //}
 
-RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickDown(HWND h)
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickDown(CDirectUIButton* button)
 {
-	::OutputDebugString(L"鼠标左键按下\n");
+	TCHAR ch[100];
+	swprintf_s(ch, 100, L"button = %p", button);
+	::OutputDebugString(L"鼠标左键按下 :");
+	::OutputDebugString(ch);
+	::OutputDebugString(L"\n");
 	return CONTINUE;
 }
 
-RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveStartIn(HWND h)
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveStartIn(CDirectUIButton* button)
 {
-	::OutputDebugString(L"鼠标移入\n");
+	TCHAR ch[100];
+	swprintf_s(ch, 100, L"button = %p", button);
+	::OutputDebugString(L"鼠标移入 :");
+	::OutputDebugString(ch);
+	::OutputDebugString(L"\n");
 	return CONTINUE;
 }
 
-RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickUp(HWND h)
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickUp(CDirectUIButton* button)
 {
-	::OutputDebugString(L"鼠标左键抬起\n");
+	TCHAR ch[100];
+	swprintf_s(ch, 100, L"button = %p", button);
+	::OutputDebugString(L"鼠标左键抬起 :");
+	::OutputDebugString(ch);
+	::OutputDebugString(L"\n");
 	return CONTINUE;
 }
 
-RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveIn(HWND h)
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseMoveIn(CDirectUIButton* button)
 {
-	::OutputDebugString(L"鼠标正在移动\n");
+	TCHAR ch[100];
+	swprintf_s(ch, 100, L"button = %p", button);
+	::OutputDebugString(L"鼠标正在移动 :");
+	::OutputDebugString(ch);
+	::OutputDebugString(L"\n");
 	return CONTINUE;
 }
 
-RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseLeft(HWND h)
+RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnMouseLeft(CDirectUIButton* button)
 {
-	::OutputDebugString(L"鼠标离开\n");
+	TCHAR ch[100];
+	swprintf_s(ch, 100, L"button = %p", button);
+	::OutputDebugString(L"鼠标离开 :");
+	::OutputDebugString(ch);
+	::OutputDebugString(L"\n");
 	return CONTINUE;
 }

@@ -41,7 +41,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 					RESULTCALLBACK result = DONOTHING;
 					if (bt->GetEventCallBack())
-						result = bt->GetEventCallBack()->OnMouseLeft(hWnd);
+						result = bt->GetEventCallBack()->OnMouseLeft(bt);
 
 					if (result == DONOTPAINT)
 					{
@@ -71,7 +71,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 				RESULTCALLBACK result = DONOTHING;
 				if (button->GetEventCallBack())
-					result = button->GetEventCallBack()->OnMouseMoveStartIn(hWnd);
+					result = button->GetEventCallBack()->OnMouseMoveStartIn(button);
 
 				if (result == DONOTPAINT)
 				{
@@ -103,7 +103,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
 			RESULTCALLBACK result = DONOTHING;
 			if (bt->GetEventCallBack())
-				result = bt->GetEventCallBack()->OnLeftButtonClickDown(hWnd);
+				result = bt->GetEventCallBack()->OnLeftButtonClickDown(bt);
 
 			if (result == DONOTPAINT)
 			{
@@ -132,7 +132,7 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			CDirectUIButton* bt = static_cast<CDirectUIButton*>(current_base);
 			RESULTCALLBACK result = DONOTHING;
 			if (bt->GetEventCallBack())
-				result = bt->GetEventCallBack()->OnLeftButtonClickUp(hWnd);
+				result = bt->GetEventCallBack()->OnLeftButtonClickUp(bt);
 
 			if (result == DONOTPAINT)
 			{

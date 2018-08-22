@@ -131,6 +131,7 @@
     <ClInclude Include="uibutton.h" />
     <ClInclude Include="uiposition.h" />
     <ClInclude Include="uirect.h" />
+    <ClInclude Include="uitext.h" />
     <ClInclude Include="uitype.h" />
     <ClInclude Include="uiwnd.h" />
   </ItemGroup>

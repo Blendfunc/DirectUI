@@ -50,5 +50,8 @@
     <ClInclude Include="uitype.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="uitext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
