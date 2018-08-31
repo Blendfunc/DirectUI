@@ -180,7 +180,14 @@ CDirectUIWnd::CDirectUIWnd(HINSTANCE hinstance, int width, int height)
 	DeleteObject(old_bitmap);
 
 	HBITMAP bitmap = (HBITMAP)LoadImage(NULL, L"D:\\Aurora.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+
+	bitmap = 0;
+	bitmap = CDCControl::GetDCControlInstance()->CreateCompatibleDCColorBitmapWith24Bits(m_window_memory_dc, width, height, CDCControl::white);
+
+
+
 	HBITMAP oldBitmap = (HBITMAP)SelectObject(m_window_memory_dc, bitmap);
+	CDCControl::GetDCControlInstance()->WriteBmp(L"c:\\123.bmp", m_window_memory_dc);
 	DeleteObject(oldBitmap);
 
 	InitUIMap(height, width);

@@ -1,5 +1,5 @@
 #include "uiwnd.h"
-
+#include "uitext.h"
 
 class DIRECTUIBUTTONCALLBACK : public IDirectUIButtonUICallBack
 {
@@ -17,6 +17,11 @@ public:
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine, int iCmdShow)
 {
+	CDirectUIText::GetFonts();
+
+
+
+
 	CDirectUIWndClass::GetCDirectUIWndClassInstance()->SetDirectUIWndAttribute(L"MyDirectUIWnd", hInstance);
 	ATOM atom = CDirectUIWndClass::GetCDirectUIWndClassInstance()->RegisterDirectUIWndClass();
 	DIRECTUIBUTTONCALLBACK cb, cb2, cb3, cb4;

@@ -124,6 +124,7 @@
     <ClCompile Include="test.cpp" />
     <ClCompile Include="uibutton.cpp" />
     <ClCompile Include="uirect.cpp" />
+    <ClCompile Include="uitext.cpp" />
     <ClCompile Include="uiwnd.cpp" />
   </ItemGroup>
   <ItemGroup>

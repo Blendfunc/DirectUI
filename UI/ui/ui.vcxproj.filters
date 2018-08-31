@@ -30,6 +30,9 @@
     <ClCompile Include="dc_control.hpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="uitext.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="uiwnd.h">
