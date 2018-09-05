@@ -66,6 +66,33 @@ void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 	}
 	DeleteObject(oldBitmap);
 	StretchBlt(m_DC, 0, 0, m_Width, m_Height, m_MemoryDC, 0, 0, bitmapInfo.bmWidth, bitmapInfo.bmHeight, SRCCOPY);
+	
+
+	CDirectUIText text;
+	text.SetDCBKColor(RGB(255, 255, 255));
+	text.SetDirectUITextColor(RGB(255, 0, 0));
+	text.SetDCHeight(50);
+	text.SetDCWidth(200);
+	text.SetText("ÄãºÃ");
+	text.SetFontName("Î¢ÈíÑÅºÚ");
+	text.UpdateDC();
+	HDC dc2 = text.GetDirectUITextDC();
+
+	bitmap = (HBITMAP)LoadImage(NULL, L"D:\\haha.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HDC dc = CreateCompatibleDC(0);
+
+	SelectObject(dc, bitmap);
+
+	CDCControl::colorrgb rgb;
+	rgb.r = 164; rgb.g = 51; rgb.b = 39;
+	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc, rgb, 0, 0, 100, 100, 0, 0);
+
+	rgb.r = 255; rgb.g = 255; rgb.b = 255;
+	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc2, rgb, 100, 100, 200, 50, 0, 0);
+
+
+	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", dc);
+	
 	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", m_DC);
 }
 

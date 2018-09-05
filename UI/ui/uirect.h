@@ -1,8 +1,9 @@
 #pragma once
 #include <windows.h>
 #include "uiattribute.h"
-#include "dc_control.hpp"
+#include "uitext.h"
 #include <map>
+
 
 class CDirectUIRect
 {
@@ -24,7 +25,7 @@ public:
 
 	void SetUserData(void* data);
 	void* GetUserData();
-private:
+protected:
 	HDC m_DC;
 	HBITMAP m_Bitmap;
 

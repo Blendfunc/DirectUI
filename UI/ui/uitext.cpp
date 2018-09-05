@@ -4,6 +4,8 @@
 
 std::string GetCharSet(BYTE b);
 
+std::vector<directuifont> CDirectUIText::vt_font;
+
 int CALLBACK EnumFontFamExProc(const LOGFONTA* lpelfe, const TEXTMETRICA* lpntme, DWORD FontType, LPARAM lParam)
 {
 
@@ -64,8 +66,12 @@ int CALLBACK EnumFontFamExProc(const LOGFONTA* lpelfe, const TEXTMETRICA* lpntme
 	ofile << "\n" << std::flush;
 
 	ofile.close();
-
 	
+	directuifont df;
+	CDirectUIText::vt_font.push_back(df);
+	memcpy(&CDirectUIText::vt_font.back().lfa, lpelfe, sizeof(LOGFONTA));
+	memcpy(&CDirectUIText::vt_font.back().tma, lpntme, sizeof(TEXTMETRICA));
+	CDirectUIText::vt_font.back().dw_font_type = FontType;
 	return 1;
 }
 
@@ -157,6 +163,22 @@ std::string GetCharSet(BYTE b)
 
 
 
+CDirectUIText::CDirectUIText()
+{
+	m_dc = CreateCompatibleDC(NULL);
+	CDCControl::GetDCControlInstance()->SwitchDCColorMode(CDCControl::color, m_dc, 0);
+	m_height = 1;
+	m_width = 1;
+	m_cr_bk = RGB(255, 255, 255);
+	m_cr_text = RGB(0, 0, 0);
+
+
+}
+
+CDirectUIText::~CDirectUIText()
+{
+}
+
 void CDirectUIText::GetFonts()
 {
 	LOGFONTA lf;
@@ -176,4 +198,66 @@ void CDirectUIText::GetFonts()
 	//int j = EnumFontFamiliesEx(hdc, &lf, EnumFontFamExProc, 0, 0);
 
 
+}
+
+void CDirectUIText::SetText(LPCSTR text)
+{
+	m_string = text;
+}
+
+void CDirectUIText::SetDCHeight(int height)
+{
+	m_height = height;
+}
+
+void CDirectUIText::SetDCWidth(int width)
+{
+	m_width = width;
+}
+
+void CDirectUIText::SetDCBKColor(COLORREF cr)
+{
+	m_cr_bk = cr;
+}
+
+void CDirectUIText::SetDirectUITextColor(COLORREF cr)
+{
+	m_cr_text = cr;
+}
+
+void CDirectUIText::SetFontName(LPCSTR font)
+{
+	m_font_name = font;
+}
+
+void CDirectUIText::UpdateDC()
+{
+	HBITMAP bitmap = CDCControl::GetDCControlInstance()->CreateCompatibleDCColorBitmapWith24Bits(m_dc, m_width, m_height, CDCControl::colors::undefine, m_cr_bk);
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_dc, bitmap);
+	DeleteObject(old_bitmap);
+	SetBkColor(m_dc, m_cr_bk);
+	SetTextColor(m_dc, m_cr_text);
+	HFONT font = 0;
+
+
+	for (auto iter = CDirectUIText::vt_font.begin(); iter != CDirectUIText::vt_font.end(); iter++)
+	{
+		if (m_font_name == iter->lfa.lfFaceName)
+		{
+			font = CreateFontIndirectA(&iter->lfa);
+			break;
+		}
+	}
+
+	HFONT old_font = (HFONT)SelectObject(m_dc, font);
+	DeleteObject(old_font);
+	RECT rc;
+	SetRect(&rc, 0, 0, m_width, m_height);
+	DrawTextA(m_dc, m_string.data(), -1, &rc, DT_LEFT);
+
+}
+
+HDC CDirectUIText::GetDirectUITextDC()
+{
+	return m_dc;
 }

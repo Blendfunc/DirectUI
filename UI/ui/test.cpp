@@ -29,13 +29,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	CDirectUIButton button;
 	button.SetEventCallBack(&cb);
 	CDirectUIRect * rect = (CDirectUIRect*)button.GetDirectUIButtonRect();
-	rect->SetWidthHeight(30, 50);
+	rect->SetWidthHeight(300, 500);
 	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 
-	CDirectUIButton button1;
+	/*CDirectUIButton button1;
 	button1.SetEventCallBack(&cb);
 	CDirectUIRect * rect1 = (CDirectUIRect*)button1.GetDirectUIButtonRect();
 	rect1->SetWidthHeight(30, 50);
@@ -61,13 +61,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect3->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect3->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
-	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
+	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");*/
 
 	CDirectUIWnd wnd(hInstance, 500, 300);
 	wnd.AddDirectUIButton(&button, 0, 0);
-	wnd.AddDirectUIButton(&button1, 50, 0);
-	wnd.AddDirectUIButton(&button2, 100, 0);
-	wnd.AddDirectUIButton(&button3, 150, 0);
+	//wnd.AddDirectUIButton(&button1, 50, 0);
+	//wnd.AddDirectUIButton(&button2, 100, 0);
+	//wnd.AddDirectUIButton(&button3, 150, 0);
 	wnd.CreateDirectUIWnd(atom);
 	wnd.ShowDirectUIWnd();
 
