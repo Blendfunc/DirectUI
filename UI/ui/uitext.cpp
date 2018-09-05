@@ -177,6 +177,13 @@ CDirectUIText::CDirectUIText()
 
 CDirectUIText::~CDirectUIText()
 {
+
+	HBITMAP bitmap = (HBITMAP)GetCurrentObject(m_dc, OBJ_BITMAP);
+	DeleteObject(bitmap);
+	HFONT font = (HFONT)GetCurrentObject(m_dc, OBJ_FONT);
+	DeleteObject(font);
+	DeleteDC(m_dc);
+
 }
 
 void CDirectUIText::GetFonts()
@@ -195,6 +202,7 @@ void CDirectUIText::GetFonts()
 
 	int i = EnumFontFamiliesExA(hdc, &lf, EnumFontFamExProc, 0, 0);
 
+	ReleaseDC(hw, hdc);
 	//int j = EnumFontFamiliesEx(hdc, &lf, EnumFontFamExProc, 0, 0);
 
 

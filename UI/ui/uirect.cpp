@@ -78,14 +78,14 @@ void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 	text.UpdateDC();
 	HDC dc2 = text.GetDirectUITextDC();
 
-	bitmap = (HBITMAP)LoadImage(NULL, L"D:\\haha.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	/*bitmap = (HBITMAP)LoadImage(NULL, L"D:\\haha.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HDC dc = CreateCompatibleDC(0);
 
-	SelectObject(dc, bitmap);
+	SelectObject(dc, bitmap);*/
 
 	CDCControl::colorrgb rgb;
-	rgb.r = 164; rgb.g = 51; rgb.b = 39;
-	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc, rgb, 0, 0, 100, 100, 0, 0);
+	/*rgb.r = 164; rgb.g = 51; rgb.b = 39;
+	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc, rgb, 0, 0, 100, 100, 0, 0);*/
 
 	rgb.r = 255; rgb.g = 255; rgb.b = 255;
 	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc2, rgb, 100, 100, 200, 50, 0, 0);
