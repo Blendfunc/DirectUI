@@ -1,6 +1,8 @@
 #pragma once
 #include "uirect.h"
 #include "uitype.h"
+#include "uitext.h"
+
 
 enum RESULTCALLBACK
 {
@@ -58,8 +60,13 @@ public:
 	int GetYPosition();
 
 	const CDirectUIRect* GetDirectUIButtonRect();
+
+	const CDirectUIText* GetDirectUIButtonText();
+
+	void UpdateDirectUIButtonDC();
 private:
 	CDirectUIRect m_Rect;
+	CDirectUIText m_Text;
 	IDirectUIButtonUICallBack * m_callback;
 	int m_x;
 	int m_y;

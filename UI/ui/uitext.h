@@ -36,12 +36,19 @@ public:
 	void SetFontName(LPCSTR font);
 
 
-	COLORREF GetTextDCBKColor();
+	COLORREF GetTextDCBKColor() const;
 
 	void UpdateDC();
 
-	HDC GetDirectUITextDC();
+	HDC GetDirectUITextDC() const;
 
+	void SetFontHeight(int height);
+
+	void SetFontWidth(int width);
+
+	int GetDirectUITextDCHeight() const;
+
+	int GetDirectUITextDCWidth() const;
 protected:
 	HDC m_dc;
 	int m_height;
@@ -50,8 +57,6 @@ protected:
 	std::string m_font_name;
 	COLORREF m_cr_bk;
 	COLORREF m_cr_text;
-
-
-
-
+	int m_font_height;
+	int m_font_width;
 };

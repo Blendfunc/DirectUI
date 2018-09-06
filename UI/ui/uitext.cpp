@@ -37,6 +37,8 @@ int CALLBACK EnumFontFamExProc(const LOGFONTA* lpelfe, const TEXTMETRICA* lpntme
 
 	ch = lpelfe->lfUnderline == 0 ? "否  " : "是  ";
 
+	ofile << "输出质量：" << ltoa(lpelfe->lfQuality, chl, 10) << "  ";
+
 	ofile << "是否带下划线：" << ch;
 
 	ch = lpelfe->lfStrikeOut == 0 ? "否  " : "是  ";
@@ -171,8 +173,8 @@ CDirectUIText::CDirectUIText()
 	m_width = 1;
 	m_cr_bk = RGB(255, 255, 255);
 	m_cr_text = RGB(0, 0, 0);
-
-
+	m_font_height = 1;
+	m_font_width = 0;
 }
 
 CDirectUIText::~CDirectUIText()
@@ -238,6 +240,11 @@ void CDirectUIText::SetFontName(LPCSTR font)
 	m_font_name = font;
 }
 
+COLORREF CDirectUIText::GetTextDCBKColor() const
+{
+	return m_cr_bk;
+}
+
 void CDirectUIText::UpdateDC()
 {
 	HBITMAP bitmap = CDCControl::GetDCControlInstance()->CreateCompatibleDCColorBitmapWith24Bits(m_dc, m_width, m_height, CDCControl::colors::undefine, m_cr_bk);
@@ -245,6 +252,7 @@ void CDirectUIText::UpdateDC()
 	DeleteObject(old_bitmap);
 	SetBkColor(m_dc, m_cr_bk);
 	SetTextColor(m_dc, m_cr_text);
+	SetBkMode(m_dc, TRANSPARENT);
 	HFONT font = 0;
 
 
@@ -252,10 +260,15 @@ void CDirectUIText::UpdateDC()
 	{
 		if (m_font_name == iter->lfa.lfFaceName)
 		{
+			iter->lfa.lfQuality = ANTIALIASED_QUALITY;
+			iter->lfa.lfWeight = FW_BLACK;
+			iter->lfa.lfWidth = m_font_width;
+			iter->lfa.lfHeight = m_font_height;
 			font = CreateFontIndirectA(&iter->lfa);
 			break;
 		}
 	}
+	//PROOF_QUALITY
 
 	HFONT old_font = (HFONT)SelectObject(m_dc, font);
 	DeleteObject(old_font);
@@ -265,7 +278,27 @@ void CDirectUIText::UpdateDC()
 
 }
 
-HDC CDirectUIText::GetDirectUITextDC()
+HDC CDirectUIText::GetDirectUITextDC() const
 {
 	return m_dc;
+}
+
+void CDirectUIText::SetFontHeight(int height)
+{
+	m_font_height = height;
+}
+
+void CDirectUIText::SetFontWidth(int width)
+{
+	m_font_width = width;
+}
+
+int CDirectUIText::GetDirectUITextDCHeight() const
+{
+	return m_height;
+}
+
+int CDirectUIText::GetDirectUITextDCWidth() const
+{
+	return m_width;
 }

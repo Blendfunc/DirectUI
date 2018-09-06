@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include "uiattribute.h"
+#include "dc_control.hpp"
 #include "uitext.h"
 #include <map>
 
@@ -12,19 +13,22 @@ public:
 	~CDirectUIRect();
 public:
 	//void SetCompatibleMainDC(HDC dc);
-	void SetWidthHeight(int height, int width);
+	void SetWidth(int width);
+	void SetHeight(int height);
 	void SetUIAttributeImg(DirectUIAttribute attribute, LPCTSTR filename);
 
 	int GetWidth() const;
 	int GetHeight() const;
 public:
-	void UpdateDC(DirectUIAttribute attribute);
+	void UpdateDC();
 	void UpdateDC(LPCTSTR bitmap_name);
 
 	HDC GetDirectUIRectDC() const;
 
 	void SetUserData(void* data);
 	void* GetUserData();
+
+	void SetCurrentAttribute(DirectUIAttribute attribute);
 protected:
 	HDC m_DC;
 	HBITMAP m_Bitmap;
@@ -38,4 +42,5 @@ protected:
 	int m_Width;
 
 	void* m_UserData;
+	DirectUIAttribute m_current_attribute;
 };

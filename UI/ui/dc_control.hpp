@@ -1,3 +1,4 @@
+#pragma once
 #include "windows.h"
 #include <vector>
 
@@ -326,14 +327,14 @@ public:
 		
 		//É¾³ýµ¥É«DC
 		DeleteObject(bitmap);
-		DeleteObject(dcMemMonochrome);
+		DeleteDC(dcMemMonochrome);
 		//
 		BitBlt(dc_des, x_des, y_des, width, height, dc_src, x_src, y_src, SRCINVERT);
 		BitBlt(dc_des, x_des, y_des, width, height, dcMemColor, 0, 0, SRCAND);
 		BitBlt(dc_des, x_des, y_des, width, height, dc_src, x_src, y_src, SRCINVERT);
 		//
 		DeleteObject(color_bitmap);
-		DeleteObject(dcMemColor);
+		DeleteDC(dcMemColor);
 	}
 private:
 	BOOL WriteBmp(const TSTRING &strFile, HDC hdc, const RECT &rcDC)

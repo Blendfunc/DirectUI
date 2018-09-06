@@ -15,12 +15,15 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 	case WM_PAINT:
 	{
 		HDC dc0 = BeginPaint(hWnd, &ps);
+		//CDCControl::GetDCControlInstance()->WriteBmp(L"c:\\123.bmp", dc0);
 		//HDC main = GetDC(hWnd);
 		HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
+		//CDCControl::GetDCControlInstance()->WriteBmp(L"c:\\123.bmp", dc);
 		int width = ps.rcPaint.right - ps.rcPaint.left;
 		int height = ps.rcPaint.bottom - ps.rcPaint.top;
 		BitBlt(dc0, ps.rcPaint.left, ps.rcPaint.top, width, height, dc, ps.rcPaint.left, ps.rcPaint.top, SRCCOPY);
 		EndPaint(hWnd, &ps);
+		
 		//ReleaseDC(hWnd, main);
 		break;
 	}
@@ -50,7 +53,10 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 					else if (result == CONTINUE || result == DONOTHING)
 					{
 						CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
-						rt->UpdateDC(DUI_MOUSE_REMAINON);
+						rt->SetCurrentAttribute(DUI_MOUSE_REMAINON);
+						CDirectUIText* text = const_cast<CDirectUIText*>(bt->GetDirectUIButtonText());
+						text->SetText("离开");
+						bt->UpdateDirectUIButtonDC();
 						CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
 						dwnd->UpdateMemoryDC(current_base);
 						rect_validate.left = bt->GetXPosition();
@@ -80,7 +86,11 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 				else if(result == CONTINUE || result == DONOTHING)
 				{
 					CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
-					rect->UpdateDC(DUI_MOUSE_MOVE);
+					rect->SetCurrentAttribute(DUI_MOUSE_MOVE);
+					CDirectUIText* text = const_cast<CDirectUIText*>(button->GetDirectUIButtonText());
+					text->SetText("进入");
+					button->UpdateDirectUIButtonDC();
+					/*rect->UpdateDC(DUI_MOUSE_MOVE);*/
 					CDirectUIWnd* duiwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
 					duiwnd->UpdateMemoryDC(base);
 					//HDC dc = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetWindowMemoryDC(hWnd);
@@ -112,7 +122,10 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			else if (result == CONTINUE || result == DONOTHING)
 			{
 				CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
-				rt->UpdateDC(DUI_MOUSE_LEFT_CLICK_DOWN);
+				rt->SetCurrentAttribute(DUI_MOUSE_LEFT_CLICK_DOWN);
+				CDirectUIText* text = const_cast<CDirectUIText*>(bt->GetDirectUIButtonText());
+				text->SetText("点下");
+				bt->UpdateDirectUIButtonDC();
 				CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
 				dwnd->UpdateMemoryDC(current_base);
 				rect_validate.left = bt->GetXPosition();
@@ -141,7 +154,10 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			else if (result == CONTINUE || result == DONOTHING)
 			{
 				CDirectUIRect* rt = const_cast<CDirectUIRect*>(bt->GetDirectUIButtonRect());
-				rt->UpdateDC(DUI_MOUSE_LEFT_CLICK_UP);
+				rt->SetCurrentAttribute(DUI_MOUSE_LEFT_CLICK_UP);
+				CDirectUIText* text = const_cast<CDirectUIText*>(bt->GetDirectUIButtonText());
+				text->SetText("松开");
+				bt->UpdateDirectUIButtonDC();
 				CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
 				dwnd->UpdateMemoryDC(current_base);
 				rect_validate.left = bt->GetXPosition();
@@ -207,7 +223,7 @@ HWND CDirectUIWnd::CreateDirectUIWnd(ATOM classAtom, LPCWSTR lpWindowName)
 	GetClassInfo(m_Hinstance, lpcwstr, &wndClass);
 	m_HWND = CreateWindow(wndClass.lpszClassName, lpWindowName, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, m_window_width, m_window_height, NULL, NULL, m_Hinstance, NULL);
 	LONG style = ::GetWindowLongPtr(m_HWND, GWL_STYLE);
-	style = style &~WS_CAPTION &~WS_SYSMENU&~WS_SIZEBOX;
+	//style = style &~WS_CAPTION &~WS_SYSMENU&~WS_SIZEBOX;
 	::SetWindowLongPtr(m_HWND, GWL_STYLE, style);
 
 	CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->RegisterDirectUIPositionManager(m_HWND, this);
@@ -243,7 +259,8 @@ void CDirectUIWnd::AddDirectUIButton(CDirectUIButton * button, int x, int y)
 	button->SetYPosition(y);
 
 	CDirectUIRect* rect = const_cast<CDirectUIRect*>(button->GetDirectUIButtonRect());
-	rect->UpdateDC(DUI_MOUSE_REMAINON);
+	rect->SetCurrentAttribute(DUI_MOUSE_REMAINON);
+	button->UpdateDirectUIButtonDC();
 	UpdateMemoryDC(dynamic_cast<CDirectUIBase*>(button));
 }
 

@@ -57,3 +57,33 @@ const CDirectUIRect * CDirectUIButton::GetDirectUIButtonRect()
 {
 	return &m_Rect;
 }
+
+const CDirectUIText * CDirectUIButton::GetDirectUIButtonText()
+{
+	return &m_Text;
+}
+
+void CDirectUIButton::UpdateDirectUIButtonDC()
+{
+	m_Rect.UpdateDC();
+	m_Text.UpdateDC();
+	COLORREF cr = m_Text.GetTextDCBKColor();
+	CDCControl::colorrgb rgb;
+	rgb.b = GetBValue(cr);
+	rgb.g = GetGValue(cr);
+	rgb.r = GetRValue(cr);
+
+	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_Rect.GetDirectUIRectDC(),
+		m_Text.GetDirectUITextDC(),
+		rgb,
+		0,
+		0,
+		m_Text.GetDirectUITextDCWidth(),
+		m_Text.GetDirectUITextDCHeight(),
+		0,
+		0);
+
+
+
+
+}

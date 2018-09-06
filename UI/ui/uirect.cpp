@@ -11,6 +11,8 @@ CDirectUIRect::CDirectUIRect()
 	m_Height = 0;
 	m_Width = 0;
 	m_UserData = 0;
+	m_Bitmap = 0;
+	m_current_attribute = DirectUIAttribute::DUI_MOUSE_REMAINON;
 }
 
 CDirectUIRect::~CDirectUIRect()
@@ -26,13 +28,18 @@ CDirectUIRect::~CDirectUIRect()
 //	m_OwnerDC = dc;
 //}
 
-void CDirectUIRect::SetWidthHeight(int height, int width)
+void CDirectUIRect::SetWidth(int width)
 {
-	m_Bitmap = CreateCompatibleBitmap(m_DC, width, height);
-	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_DC, m_Bitmap);
-	m_Height = height;
+//	m_Bitmap = CreateCompatibleBitmap(m_DC, width, height);
+//	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_DC, m_Bitmap);
+//	m_Height = height;
 	m_Width = width;
-	DeleteObject(old_bitmap);
+//	DeleteObject(old_bitmap);
+}
+
+void CDirectUIRect::SetHeight(int height)
+{
+	m_Height = height;
 }
 
 void CDirectUIRect::SetUIAttributeImg(DirectUIAttribute attribute, LPCTSTR filename)
@@ -52,10 +59,13 @@ int CDirectUIRect::GetHeight() const
 	return m_Height;
 }
 
-void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
+void CDirectUIRect::UpdateDC()
 {
+	m_Bitmap = CreateCompatibleBitmap(m_DC, m_Width, m_Height);
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_DC, m_Bitmap);
+	DeleteObject(old_bitmap);
 	//HBITMAP bitmap = LoadBitmap(NULL, m_AttrMap.at(attribute).c_str());
-	HBITMAP bitmap = (HBITMAP)LoadImage(NULL, m_AttrMap.at(attribute).c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HBITMAP bitmap = (HBITMAP)LoadImage(NULL, m_AttrMap.at(m_current_attribute).c_str(), IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HBITMAP oldBitmap = (HBITMAP)SelectObject(m_MemoryDC, bitmap);
 	BITMAP bitmapInfo;
 	memset(&bitmapInfo, 0, sizeof(BITMAP));
@@ -67,28 +77,55 @@ void CDirectUIRect::UpdateDC(DirectUIAttribute attribute)
 	DeleteObject(oldBitmap);
 	StretchBlt(m_DC, 0, 0, m_Width, m_Height, m_MemoryDC, 0, 0, bitmapInfo.bmWidth, bitmapInfo.bmHeight, SRCCOPY);
 	
+	
+	//»æÖÆÎÄ×Ö
 
-	CDirectUIText text;
-	text.SetDCBKColor(RGB(255, 255, 255));
+	/*CDirectUIText text;
+	text.SetDCBKColor(RGB(0, 0, 0));
 	text.SetDirectUITextColor(RGB(255, 0, 0));
 	text.SetDCHeight(50);
 	text.SetDCWidth(200);
-	text.SetText("ÄãºÃ");
-	text.SetFontName("Î¢ÈíÑÅºÚ");
+	text.SetText("ÄãºÃ123456789");
+	text.SetFontName("Ó×Ô²");
 	text.UpdateDC();
-	HDC dc2 = text.GetDirectUITextDC();
+	HDC dc2 = text.GetDirectUITextDC();*/
+
+
+
+	//HFONT font = 0;
+	//SetBkMode(m_DC, TRANSPARENT);
+	//SetTextColor(m_DC, RGB(255, 0, 0));
+	//for (auto iter = CDirectUIText::vt_font.begin(); iter != CDirectUIText::vt_font.end(); iter++)
+	//{
+	//	//strcmp(iter->lfa.lfFaceName, "Ó×Ô²") == 0
+	//	if (strcmp(iter->lfa.lfFaceName, "Ó×Ô²") == 0)
+	//	{
+	//		iter->lfa.lfQuality = ANTIALIASED_QUALITY;
+	//		iter->lfa.lfWeight = FW_BLACK;
+	//		iter->lfa.lfHeight = 20;
+	//		iter->lfa.lfWidth = 5;
+	//		font = CreateFontIndirectA(&iter->lfa);
+	//		break;
+	//	}
+	//}
+	//SelectObject(m_DC, font);
+	//RECT rc;
+	//SetRect(&rc, 0, 0, 300, 150);
+	//DrawTextA(m_DC, "ÄãºÃ123456789", -1, &rc, DT_LEFT);
+
+
 
 	/*bitmap = (HBITMAP)LoadImage(NULL, L"D:\\haha.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	HDC dc = CreateCompatibleDC(0);
 
 	SelectObject(dc, bitmap);*/
 
-	CDCControl::colorrgb rgb;
+	/*CDCControl::colorrgb rgb;*/
 	/*rgb.r = 164; rgb.g = 51; rgb.b = 39;
 	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc, rgb, 0, 0, 100, 100, 0, 0);*/
 
-	rgb.r = 255; rgb.g = 255; rgb.b = 255;
-	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc2, rgb, 100, 100, 200, 50, 0, 0);
+	/*rgb.r = 0; rgb.g = 0; rgb.b = 0;
+	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_DC, dc2, rgb, 0, 0, 200, 50, 0, 0);*/
 
 
 	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\DCSavePart.bmp", dc);
@@ -114,4 +151,9 @@ void CDirectUIRect::UpdateDC(LPCTSTR bitmap_name)
 HDC CDirectUIRect::GetDirectUIRectDC() const
 {
 	return m_DC;
+}
+
+void CDirectUIRect::SetCurrentAttribute(DirectUIAttribute attribute)
+{
+	m_current_attribute = attribute;
 }
