@@ -68,7 +68,9 @@ public:
 	HWND CreateDirectUIWnd(ATOM classAtom, LPCWSTR lpWindowName = L"DirectUIWnd");
 	void ShowDirectUIWnd();
 
-	void AddDirectUIButton(CDirectUIButton* button, int x, int y);
+	void AddDirectUIButton(CDirectUIButton* button);
+
+	void RemoveDirectUIButton(CDirectUIButton** button);
 
 	void UpdateMemoryDC(CDirectUIBase* base);
 public:

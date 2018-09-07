@@ -1,5 +1,7 @@
 #include "uiwnd.h"
 #include "uitext.h"
+#include <time.h>
+
 
 class DIRECTUIBUTTONCALLBACK : public IDirectUIButtonUICallBack
 {
@@ -15,35 +17,76 @@ public:
 	virtual RESULTCALLBACK OnMouseLeft(CDirectUIButton* button);
 };
 
+DIRECTUIBUTTONCALLBACK cb, cb2, cb3, cb4;
+CDirectUIWnd wnd(0, 600, 500);
+
+int i_font = 0;
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine, int iCmdShow)
 {
+	wnd.m_Hinstance = hInstance;
 	CDirectUIText::GetFonts();
-
+	srand((int)time(NULL));
 
 
 
 	CDirectUIWndClass::GetCDirectUIWndClassInstance()->SetDirectUIWndAttribute(L"MyDirectUIWnd", hInstance);
 	ATOM atom = CDirectUIWndClass::GetCDirectUIWndClassInstance()->RegisterDirectUIWndClass();
-	DIRECTUIBUTTONCALLBACK cb, cb2, cb3, cb4;
+	
 
 	CDirectUIButton button;
 	button.SetEventCallBack(&cb);
 	CDirectUIRect * rect = (CDirectUIRect*)button.GetDirectUIButtonRect();
-	rect->SetWidth(200);
-	rect->SetHeight(100);
+	rect->SetWidth(600);
+	rect->SetHeight(500);
 	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
 	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
 	CDirectUIText* text = const_cast<CDirectUIText*>(button.GetDirectUIButtonText());
 	text->SetDCBKColor(RGB(255, 255, 255));
-	text->SetDirectUITextColor(RGB(255, 0, 0));
-	text->SetDCHeight(50);
-	text->SetDCWidth(200);
-	text->SetText("123456789");
-	text->SetFontName("Ó×Ô²");
-	text->SetFontHeight(50);
-	text->SetFontWidth(50);
+	text->SetDirectUITextColor(RGB(0, 0, 0));
+	text->SetDCHeight(500);
+	text->SetDCWidth(600);
+	text->SetText("");
+	//text->SetFontName("Î¢ÈíÑÅºÚ");
+	text->SetFontHeight(30);
+	text->SetFontWidth(30);
+	button.SetXPosition(0);
+	button.SetYPosition(0);
+
+	text->SetDirectUITextFont(0);
+
+
+	/*for (int j = 0; j < 500; j += 30)
+	{
+		for (int i = 0; i < 600; i += 50)
+		{
+			CDirectUIButton* button_new = new CDirectUIButton;
+			button_new->SetEventCallBack(&cb);
+			CDirectUIRect * rect = (CDirectUIRect*)button_new->GetDirectUIButtonRect();
+			rect->SetWidth(50);
+			rect->SetHeight(30);
+			rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+			rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+			rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+			rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
+			CDirectUIText* text = const_cast<CDirectUIText*>(button_new->GetDirectUIButtonText());
+			text->SetDCBKColor(RGB(255, 255, 255));
+			text->SetDirectUITextColor(RGB(255, 0, 0));
+			text->SetDCHeight(30);
+			text->SetDCWidth(50);
+			text->SetText("123");
+			text->SetFontName("Î¢ÈíÑÅºÚ");
+			text->SetFontHeight(14);
+			text->SetFontWidth(14);
+			button_new->SetXPosition(i);
+			button_new->SetYPosition(j);
+			wnd.AddDirectUIButton(button_new);
+		}
+	}*/
+
+
 
 
 	/*CDirectUIButton button1;
@@ -74,12 +117,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
 	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");*/
 
-	CDirectUIWnd wnd(hInstance, 500, 300);
-	wnd.AddDirectUIButton(&button, 0, 0);
+	
+	wnd.AddDirectUIButton(&button);
 	/*wnd.AddDirectUIButton(&button1, 50, 0);
 	wnd.AddDirectUIButton(&button2, 100, 0);
 	wnd.AddDirectUIButton(&button3, 150, 0);*/
-	wnd.CreateDirectUIWnd(atom);
+	wnd.CreateDirectUIWnd(atom, L"ÃþÓã");
 	wnd.ShowDirectUIWnd();
 
 	/*CDirectUIWnd wnd2(hInstance, 500, 500);
@@ -324,6 +367,23 @@ RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickDown(CDirectUIButton* bu
 	::OutputDebugString(L"Êó±ê×ó¼ü°´ÏÂ :");
 	::OutputDebugString(ch);
 	::OutputDebugString(L"\n");
+	CDirectUIText* text = const_cast<CDirectUIText*>(button->GetDirectUIButtonText());
+
+	text->SetDirectUITextFont(i_font++);
+
+	std::string str1;
+	std::string str2;
+	char ch1[33];
+	str1 = itoa(i_font, ch1, 10);
+	str2 = CDirectUIText::vt_font.at(i_font).lfa.lfFaceName;
+	std::string str3 = str1 + "  :  " + str2;
+
+	text->SetText(str3.data());
+	
+	int r = rand() % 255;
+	int g = rand() % 255;
+	int b = rand() % 255;
+	text->SetDirectUITextColor(RGB(r, g, b));
 	return CONTINUE;
 }
 
@@ -344,6 +404,39 @@ RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickUp(CDirectUIButton* butt
 	::OutputDebugString(L"Êó±ê×ó¼üÌ§Æð :");
 	::OutputDebugString(ch);
 	::OutputDebugString(L"\n");
+
+	/*CDirectUIButton* button_new = new CDirectUIButton;
+	button_new->SetEventCallBack(&cb);
+	CDirectUIRect * rect = (CDirectUIRect*)button_new->GetDirectUIButtonRect();
+	rect->SetWidth(50);
+	rect->SetHeight(30);
+	rect->SetUIAttributeImg(DUI_MOUSE_REMAINON, L"D:\\texture.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_MOVE, L"D:\\Terrain1.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_DOWN, L"D:\\l_button_click_down.bmp");
+	rect->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");
+	CDirectUIText* text = const_cast<CDirectUIText*>(button_new->GetDirectUIButtonText());
+	text->SetDCBKColor(RGB(255, 255, 255));
+	text->SetDirectUITextColor(RGB(255, 0, 0));
+	text->SetDCHeight(30);
+	text->SetDCWidth(50);
+	text->SetText("new");
+	text->SetFontName("Ó×Ô²");
+	text->SetFontHeight(50);
+	text->SetFontWidth(50);
+	button_new->SetXPosition(button->GetXPosition() + 50);
+	button_new->SetYPosition(button->GetYPosition());
+	if (button->GetXPosition() + 50 > 1920)
+	{
+		button_new->SetXPosition(0);
+		button_new->SetYPosition(30 + button->GetYPosition());
+	}
+	wnd.AddDirectUIButton(button_new);*/
+
+
+
+
+
+
 	return CONTINUE;
 }
 

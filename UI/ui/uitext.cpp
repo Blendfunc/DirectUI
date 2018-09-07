@@ -235,9 +235,15 @@ void CDirectUIText::SetDirectUITextColor(COLORREF cr)
 	m_cr_text = cr;
 }
 
-void CDirectUIText::SetFontName(LPCSTR font)
+//void CDirectUIText::SetFontName(LPCSTR font)
+//{
+//	m_font_name = font;
+//}
+
+void CDirectUIText::SetDirectUITextFont(int i)
 {
-	m_font_name = font;
+	//m_font = font;
+	m_i_font = i;
 }
 
 COLORREF CDirectUIText::GetTextDCBKColor() const
@@ -255,20 +261,23 @@ void CDirectUIText::UpdateDC()
 	SetBkMode(m_dc, TRANSPARENT);
 	HFONT font = 0;
 
-
-	for (auto iter = CDirectUIText::vt_font.begin(); iter != CDirectUIText::vt_font.end(); iter++)
-	{
-		if (m_font_name == iter->lfa.lfFaceName)
-		{
-			iter->lfa.lfQuality = ANTIALIASED_QUALITY;
-			iter->lfa.lfWeight = FW_BLACK;
-			iter->lfa.lfWidth = m_font_width;
-			iter->lfa.lfHeight = m_font_height;
-			font = CreateFontIndirectA(&iter->lfa);
-			break;
-		}
-	}
+	//int i = 0;
+	//for (auto iter = CDirectUIText::vt_font.begin(); iter != CDirectUIText::vt_font.end(); iter++)
+	//{
+	//	if (m_font_name == iter->lfa.lfFaceName)
+	//	{
+	//		iter->lfa.lfQuality = ANTIALIASED_QUALITY;
+	//		//iter->lfa.lfWeight = FW_BLACK;
+	//		//iter->lfa.lfWidth = m_font_width;
+	//		//iter->lfa.lfHeight = m_font_height;
+	//		font = CreateFontIndirectA(&iter->lfa);			
+	//		break;
+	//	}
+	//	i++;
+	//}
 	//PROOF_QUALITY
+	font = CreateFontIndirectA(&(vt_font.at(m_i_font).lfa));
+
 
 	HFONT old_font = (HFONT)SelectObject(m_dc, font);
 	DeleteObject(old_font);

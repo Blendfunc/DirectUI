@@ -33,7 +33,9 @@ public:
 
 	void SetDirectUITextColor(COLORREF cr);
 
-	void SetFontName(LPCSTR font);
+	//void SetFontName(LPCSTR font);
+
+	void SetDirectUITextFont(int i);
 
 
 	COLORREF GetTextDCBKColor() const;
@@ -54,9 +56,12 @@ protected:
 	int m_height;
 	int m_width;
 	std::string m_string;
-	std::string m_font_name;
+	//std::string m_font_name;
 	COLORREF m_cr_bk;
 	COLORREF m_cr_text;
 	int m_font_height;
 	int m_font_width;
+
+	const LOGFONTA* m_font;
+	int m_i_font;
 };
