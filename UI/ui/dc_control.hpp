@@ -228,7 +228,7 @@ public:
 
 		void* data = malloc((width * 24 + 31) / 32 * 4 * height);
 		int src = (int)data;
-		char start = 'r';
+		char start = 'b';
 
 		for (int h = 0; h < height; h++)
 		{
@@ -246,19 +246,19 @@ public:
 					case 'r':
 					{
 						*c1 = r;
-						start = 'g';
+						start = 'b';
 					}
 					break;
 					case 'g':
 					{
 						*c1 = g;
-						start = 'b';
+						start = 'r';
 					}
 					break;
 					case 'b':
 					{
 						*c1 = b;
-						start = 'r';
+						start = 'g';
 					}
 					break;
 					}

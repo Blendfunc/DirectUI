@@ -6,8 +6,8 @@
 
 struct directuifont
 {
-	LOGFONTA lfa;
-	TEXTMETRICA tma;
+	LOGFONTW lfa;
+	TEXTMETRICW tma;
 	DWORD dw_font_type;
 };
 
@@ -23,7 +23,7 @@ public:
 
 	//void SetTextColor();
 
-	void SetText(LPCSTR text);
+	void SetText(LPCWSTR text);
 
 	void SetDCHeight(int height);
 
@@ -49,19 +49,20 @@ public:
 	void SetFontWidth(int width);
 
 	int GetDirectUITextDCHeight() const;
+													
 
 	int GetDirectUITextDCWidth() const;
 protected:
 	HDC m_dc;
 	int m_height;
 	int m_width;
-	std::string m_string;
+	std::wstring m_string;
 	//std::string m_font_name;
 	COLORREF m_cr_bk;
 	COLORREF m_cr_text;
 	int m_font_height;
 	int m_font_width;
 
-	const LOGFONTA* m_font;
+	const LOGFONTW* m_font;
 	int m_i_font;
 };

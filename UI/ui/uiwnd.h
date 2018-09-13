@@ -2,9 +2,12 @@
 #include <windows.h>
 #include <vector>
 #include "uibutton.h"
+#include "uiedit.h"
+
 
 class CDirectUIWnd;
-typedef const std::map<int, std::map<int, CDirectUIBase*>>* window_ui_position;
+//typedef const std::map<int, std::map<int, CDirectUIBase*>>* window_ui_position;
+typedef const CDirectUIBase*** window_ui_position;
 class CDirectUIPositionManager
 {
 public:
@@ -35,7 +38,7 @@ private:
 	std::map<HWND, HDC> m_Window_MemoryDC;
 
 	std::map<HWND, CDirectUIWnd*> m_Window_DirectUIWindow;
-
+	
 	void SetWindowDirectUIWindow(HWND h, CDirectUIWnd* wnd);
 
 	//CDirectUIBase* m_Current_UI;
@@ -72,6 +75,11 @@ public:
 
 	void RemoveDirectUIButton(CDirectUIButton** button);
 
+	void AddDirectUIEdit(CDirectUIEdit* edit);
+
+	void RemoveDirectUIButton(CDirectUIEdit* edit);
+
+
 	void UpdateMemoryDC(CDirectUIBase* base);
 public:
 	static HINSTANCE m_Hinstance;
@@ -91,7 +99,10 @@ private:
 
 	std::vector<CDirectUIButton*> m_button_map;
 
-	std::map<int, std::map<int, CDirectUIBase*>> m_ui_map;
+	//std::map<int, std::map<int, CDirectUIBase*>> m_ui_map;
+
+	//CDirectUIBase*(*m_ui_map)[];
+	CDirectUIBase*** m_ui_map;
 
 	void InitUIMap(int height, int width);
 

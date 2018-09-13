@@ -125,6 +125,7 @@
     <ClCompile Include="dc_control.hpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="uibutton.cpp" />
+    <ClCompile Include="uiedit.cpp" />
     <ClCompile Include="uirect.cpp" />
     <ClCompile Include="uitext.cpp" />
     <ClCompile Include="uiwnd.cpp" />
@@ -132,6 +133,7 @@
   <ItemGroup>
     <ClInclude Include="uiattribute.h" />
     <ClInclude Include="uibutton.h" />
+    <ClInclude Include="uiedit.h" />
     <ClInclude Include="uiposition.h" />
     <ClInclude Include="uirect.h" />
     <ClInclude Include="uitext.h" />

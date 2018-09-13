@@ -33,6 +33,9 @@
     <ClCompile Include="uitext.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="uiedit.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="uiwnd.h">
@@ -54,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="uitext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="uiedit.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
