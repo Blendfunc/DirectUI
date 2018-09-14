@@ -59,9 +59,9 @@ void CDirectUIEdit::SetEditTextColor(COLORREF cr)
 	SetDirectUITextColor(cr);
 }
 
-void CDirectUIEdit::SetEditFont(int i)
+void CDirectUIEdit::SetEditFont(const LOGFONTW* font)
 {
-	SetDirectUITextFont(i);
+	SetDirectUITextFont(font);
 }
 
 void CDirectUIEdit::SetEditFontHeight(int height)
@@ -76,7 +76,52 @@ void CDirectUIEdit::SetEditFontWidth(int width)
 
 void CDirectUIEdit::UpdateEditDC()
 {
-	UpdateDC();
+	/*UpdateDC();*/
+	HBITMAP bitmap = CDCControl::GetDCControlInstance()->CreateCompatibleDCColorBitmapWith24Bits(m_dc, m_width, m_height, CDCControl::colors::undefine, m_cr_bk);
+	HBITMAP old_bitmap = (HBITMAP)SelectObject(m_dc, bitmap);
+	DeleteObject(old_bitmap);
+	SetBkColor(m_dc, m_cr_bk);
+	SetTextColor(m_dc, m_cr_text);
+	SetBkMode(m_dc, TRANSPARENT);
+	HFONT font = 0;
+
+	//int i = 0;
+	//for (auto iter = CDirectUIText::vt_font.begin(); iter != CDirectUIText::vt_font.end(); iter++)
+	//{
+	//	if (m_font_name == iter->lfa.lfFaceName)
+	//	{
+	//		iter->lfa.lfQuality = ANTIALIASED_QUALITY;
+	//		//iter->lfa.lfWeight = FW_BLACK;
+	//		//iter->lfa.lfWidth = m_font_width;
+	//		//iter->lfa.lfHeight = m_font_height;
+	//		font = CreateFontIndirectA(&iter->lfa);			
+	//		break;
+	//	}
+	//	i++;
+	//}
+	//PROOF_QUALITY
+	//vt_font.at(m_i_font).lfa.lfQuality = NONANTIALIASED_QUALITY;
+	font = CreateFontIndirectW(m_font);
+	//static int lfheight = 20;
+	//vt_font.at(300).lfa.lfWidth = 0;
+	//vt_font.at(300).lfa.lfHeight = lfheight;
+	//vt_font.at(300).lfa.lfHeight = lfheight;
+
+
+
+
+
+	HFONT old_font = (HFONT)SelectObject(m_dc, font);
+	DeleteObject(old_font);
+	RECT rc;
+	SetRect(&rc, 0, 0, m_width, m_height);
+
+	DrawTextW(m_dc, m_string.data(), -1, &rc, DT_LEFT| DT_EDITCONTROL| DT_CALCRECT);
+	
+	
+	DrawTextW(m_dc, m_string.data(), -1, &rc, DT_LEFT | DT_EDITCONTROL);
+
+	//CDCControl::GetDCControlInstance()->WriteBmp(L"E:\\m_dc.bmp", m_dc);
 }
 
 void CDirectUIEdit::SetXPosition(int x)

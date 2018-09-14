@@ -53,8 +53,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	text->SetFontWidth(30);
 	button.SetXPosition(0);
 	button.SetYPosition(0);
-
-	text->SetDirectUITextFont(0);
+	
+	text->SetDirectUITextFont(&(CDirectUIText::vt_font.at(100).lfa));
 
 	CDirectUIEdit edit;
 	edit.SetEditBKColor(RGB(166, 166, 166));
@@ -66,7 +66,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	//edit.SetFontWidth(30);
 	edit.SetXPosition(100);
 	edit.SetYPosition(50);
-	edit.SetEditFont(10);
+
+	//CDirectUIText::vt_font.at(100).lfa.lfQuality = NONANTIALIASED_QUALITY;
+	LOGFONTW lfw;
+	memcpy(&lfw, &(CDirectUIText::vt_font.at(100).lfa), sizeof(LOGFONTW));
+	//lfw.lfQuality = NONANTIALIASED_QUALITY;
+	edit.SetEditFont(&lfw);
 	//edit.Add('S');
 	/*for (int j = 0; j < 500; j += 30)
 	{
@@ -380,7 +385,7 @@ RESULTCALLBACK DIRECTUIBUTTONCALLBACK::OnLeftButtonClickDown(CDirectUIButton* bu
 	::OutputDebugString(L"\n");
 	CDirectUIText* text = const_cast<CDirectUIText*>(button->GetDirectUIButtonText());
 
-	text->SetDirectUITextFont(i_font++);
+	text->SetDirectUITextFont(&(CDirectUIText::vt_font.at(1).lfa));
 
 	std::wstring str1;
 	std::wstring str2;

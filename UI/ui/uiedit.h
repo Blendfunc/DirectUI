@@ -50,7 +50,7 @@ public:
 
 	void SetEditTextColor(COLORREF cr);
 
-	void SetEditFont(int i);
+	void SetEditFont(const LOGFONTW* font);
 
 	void SetEditFontHeight(int height);
 

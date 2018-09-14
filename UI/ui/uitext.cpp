@@ -175,6 +175,7 @@ CDirectUIText::CDirectUIText()
 	m_cr_text = RGB(0, 0, 0);
 	m_font_height = 1;
 	m_font_width = 0;
+	m_font = 0;
 }
 
 CDirectUIText::~CDirectUIText()
@@ -240,10 +241,15 @@ void CDirectUIText::SetDirectUITextColor(COLORREF cr)
 //	m_font_name = font;
 //}
 
-void CDirectUIText::SetDirectUITextFont(int i)
+//void CDirectUIText::SetDirectUITextFont(int i)
+//{
+//	//m_font = font;
+//	m_i_font = i;
+//}
+
+void CDirectUIText::SetDirectUITextFont(const LOGFONTW * font)
 {
-	//m_font = font;
-	m_i_font = i;
+	m_font = font;
 }
 
 COLORREF CDirectUIText::GetTextDCBKColor() const
@@ -276,8 +282,8 @@ void CDirectUIText::UpdateDC()
 	//	i++;
 	//}
 	//PROOF_QUALITY
-	vt_font.at(m_i_font).lfa.lfQuality = NONANTIALIASED_QUALITY;
-	font = CreateFontIndirectW(&(vt_font.at(m_i_font).lfa));
+	//vt_font.at(m_i_font).lfa.lfQuality = NONANTIALIASED_QUALITY;
+	font = CreateFontIndirectW(m_font);
 	//static int lfheight = 20;
 	//vt_font.at(300).lfa.lfWidth = 0;
 	//vt_font.at(300).lfa.lfHeight = lfheight;
@@ -291,7 +297,10 @@ void CDirectUIText::UpdateDC()
 	DeleteObject(old_font);
 	RECT rc;
 	SetRect(&rc, 0, 0, m_width, m_height);
-	DrawTextW(m_dc, m_string.data(), -1, &rc, DT_LEFT);
+	
+	//DrawTextW(m_dc, m_string.data(), -1, &rc, DT_LEFT| DT_EDITCONTROL| DT_CALCRECT);
+	DrawTextW(m_dc, m_string.data(), -1, &rc, DT_LEFT | DT_EDITCONTROL);
+
 	//CDCControl::GetDCControlInstance()->WriteBmp(L"E:\\m_dc.bmp", m_dc);
 }
 

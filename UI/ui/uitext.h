@@ -35,8 +35,9 @@ public:
 
 	//void SetFontName(LPCSTR font);
 
-	void SetDirectUITextFont(int i);
+//	void SetDirectUITextFont(int i);
 
+	void SetDirectUITextFont(const LOGFONTW* font);
 
 	COLORREF GetTextDCBKColor() const;
 
@@ -52,6 +53,8 @@ public:
 													
 
 	int GetDirectUITextDCWidth() const;
+
+	
 protected:
 	HDC m_dc;
 	int m_height;
