@@ -68,10 +68,13 @@ void CDirectUIButton::UpdateDirectUIButtonDC()
 	m_Rect.UpdateDC();
 	m_Text.UpdateDC();
 	COLORREF cr = m_Text.GetTextDCBKColor();
+	//COLORREF cr = m_Text.GetTextDCBKColor();
 	CDCControl::colorrgb rgb;
 	rgb.b = GetBValue(cr);
 	rgb.g = GetGValue(cr);
 	rgb.r = GetRValue(cr);
+	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\button12324567898.BMP", m_Rect.GetDirectUIRectDC());
+	//CDCControl::GetDCControlInstance()->WriteBmp(L"D:\\text123456789.BMP", m_Text.GetDirectUITextDC());
 
 	CDCControl::GetDCControlInstance()->TransparentBitmapCopy(m_Rect.GetDirectUIRectDC(),
 		m_Text.GetDirectUITextDC(),

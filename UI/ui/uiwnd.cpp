@@ -265,10 +265,18 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 			CDirectUIEdit* edit = static_cast<CDirectUIEdit*>(current_base);
 			int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 			if (delta < 0)
-				edit_scrollable++;
+				edit_scrollable= edit_scrollable+50;
 			else
-				edit_scrollable--;
-			edit->Scrollable(edit_scrollable);
+				edit_scrollable= edit_scrollable-50;
+			if (edit_scrollable <= 0)
+			{
+				edit->UpdateEditDC();
+			}
+			else
+			{
+				edit->Scrollable(edit_scrollable);
+			}
+			
 			CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
 
 			dwnd->UpdateMemoryDC(current_base);

@@ -212,6 +212,13 @@ void CDirectUIEdit::Scrollable(float height_top)
 		HBITMAP old_bitmap = (HBITMAP)SelectObject(m_edit_copy->GetDirectUIEditDC(), bitmap);
 		DeleteObject(old_bitmap);
 		//
+		int i = 0;
+		std::unordered_map<int, int> umap;
+		umap = GetLine(m_dc, m_string, m_width);
+		if (height_top > (umap.size() * str_size.cy - m_height))
+		{
+			height_top = umap.size() * str_size.cy - m_height;
+		}
 		int upper_pos = GetUpper(str_size.cy, height_top);
 		int lower_pos = GetLower(str_size.cy, height_top + m_height);
 		int line_start = upper_pos / str_size.cy;
@@ -219,9 +226,7 @@ void CDirectUIEdit::Scrollable(float height_top)
 		int char_start = 0;
 		int char_end = 0;
 
-		int i = 0;
-		std::unordered_map<int, int> umap;
-		umap = GetLine(m_dc, m_string, m_width);
+		
 		while (i != line_start)
 		{
 			char_start = char_start + umap[i];
