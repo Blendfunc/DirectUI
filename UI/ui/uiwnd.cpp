@@ -2,7 +2,7 @@
 #include"Windowsx.h"
 CDirectUIPositionManager* CDirectUIPositionManager::m_Manager = 0;
 static wchar_t edit_char[2] = {0};
-
+static int edit_scrollable = 1;
 
 LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -255,6 +255,32 @@ LRESULT CALLBACK DirectUIWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM 
 
 
 		break;
+	}
+	case WM_MOUSEWHEEL:
+	{
+		CDirectUIBase* current_base = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetCurrentUIBase(hWnd);
+		if (current_base && current_base->GetClassNameType() == DIRECTUI_EDIT)
+		{
+
+			CDirectUIEdit* edit = static_cast<CDirectUIEdit*>(current_base);
+			int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+			if (delta < 0)
+				edit_scrollable++;
+			else
+				edit_scrollable--;
+			edit->Scrollable(edit_scrollable);
+			CDirectUIWnd* dwnd = CDirectUIPositionManager::GetDirectUIPositionManagerInstance()->GetDirectUIWnd(hWnd);
+
+			dwnd->UpdateMemoryDC(current_base);
+			rect_validate.left = edit->GetXPosition();
+			rect_validate.top = edit->GetYPosition();
+			rect_validate.right = rect_validate.left + edit->GetEditWidth();
+			rect_validate.bottom = rect_validate.top + edit->GetEditHeight();
+			::InvalidateRect(hWnd, &rect_validate, FALSE);
+		}
+
+		break;
+
 	}
 	default:
 		break;

@@ -47,9 +47,9 @@ public:
 
 	void SetEventCallBack(IDirectUIButtonUICallBack * callback);
 
-	virtual void SetClassNameType(DIRECTUITYPE type);
+	virtual void SetClassNameType(DIRECTUITYPE type) override;
 
-	virtual DIRECTUITYPE GetClassNameType();
+	virtual DIRECTUITYPE GetClassNameType() override;
 
 	void SetXPosition(int x);
 	

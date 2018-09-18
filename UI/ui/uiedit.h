@@ -1,8 +1,15 @@
 #pragma once
 #include "uitype.h"
 #include "uitext.h"
+#include <unordered_map>
 
-class CDirectUIEdit;
+extern std::unordered_map<int, int> GetLine(HDC dc, const std::wstring& str, int line_widthx);
+
+extern int GetUpper(int height, float current_upper_pos);
+
+extern int GetLower(int height, float current_lower_pos);
+
+extern class CDirectUIEdit;
 
 class IDirectUIEditCallBack
 {
@@ -29,9 +36,9 @@ public:
 
 	wchar_t edit_char[2];
 
-	virtual void SetClassNameType(DIRECTUITYPE type);
+	virtual void SetClassNameType(DIRECTUITYPE type) override;
 
-	virtual DIRECTUITYPE GetClassNameType();
+	virtual DIRECTUITYPE GetClassNameType() override;
 
 
 	void Add(wchar_t wchar);
@@ -48,9 +55,16 @@ public:
 
 	void SetEditBKColor(COLORREF cr);
 
+	COLORREF GetEditBKColor();
+
 	void SetEditTextColor(COLORREF cr);
 
+	COLORREF GetEditTextColor();
+
 	void SetEditFont(const LOGFONTW* font);
+
+	const LOGFONTW* GetEditFont();
+
 
 	void SetEditFontHeight(int height);
 
@@ -69,9 +83,14 @@ public:
 
 	HDC GetDirectUIEditDC();
 
+	void SetScrollable();
+
+	void Scrollable(float height_top);
+
+	//void 
 private:
 	std::wstring m_edit_wstring;
 	int m_x;
 	int m_y;
-
+	CDirectUIEdit* m_edit_copy;
 };

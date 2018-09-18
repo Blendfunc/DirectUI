@@ -18,7 +18,7 @@ public:
 };
 
 DIRECTUIBUTTONCALLBACK cb, cb2, cb3, cb4;
-CDirectUIWnd wnd(0, 1920, 1080);
+CDirectUIWnd wnd(0, 800, 600);
 
 int i_font = 0;
 
@@ -59,19 +59,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	CDirectUIEdit edit;
 	edit.SetEditBKColor(RGB(166, 166, 166));
 	edit.SetEditTextColor(RGB(0, 0, 0));
-	edit.SetEditHeight(100);
-	edit.SetEditWidth(300);
+	edit.SetEditHeight(600);
+	edit.SetEditWidth(800);
 	//edit.SetText(L"");
 	//edit.SetFontHeight(30);
 	//edit.SetFontWidth(30);
-	edit.SetXPosition(100);
-	edit.SetYPosition(50);
+	edit.SetXPosition(0);
+	edit.SetYPosition(0);
 
 	//CDirectUIText::vt_font.at(100).lfa.lfQuality = NONANTIALIASED_QUALITY;
 	LOGFONTW lfw;
 	memcpy(&lfw, &(CDirectUIText::vt_font.at(100).lfa), sizeof(LOGFONTW));
 	//lfw.lfQuality = NONANTIALIASED_QUALITY;
 	edit.SetEditFont(&lfw);
+	edit.SetScrollable();
 	//edit.Add('S');
 	/*for (int j = 0; j < 500; j += 30)
 	{
@@ -133,7 +134,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevinstance, PSTR szCmdLine,
 	rect3->SetUIAttributeImg(DUI_MOUSE_LEFT_CLICK_UP, L"D:\\Terrain1.bmp");*/
 
 	
-	wnd.AddDirectUIButton(&button);
+	//wnd.AddDirectUIButton(&button);
 	wnd.AddDirectUIEdit(&edit);
 	/*wnd.AddDirectUIButton(&button1, 50, 0);
 	wnd.AddDirectUIButton(&button2, 100, 0);

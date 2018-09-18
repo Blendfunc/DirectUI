@@ -272,7 +272,7 @@ void CDirectUIText::UpdateDC()
 	//{
 	//	if (m_font_name == iter->lfa.lfFaceName)
 	//	{
-	//		iter->lfa.lfQuality = ANTIALIASED_QUALITY;
+	//		iter->lfa.lfQuality =7 ANTIALIASED_QUALITY;
 	//		//iter->lfa.lfWeight = FW_BLACK;
 	//		//iter->lfa.lfWidth = m_font_width;
 	//		//iter->lfa.lfHeight = m_font_height;
